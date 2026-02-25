@@ -143,7 +143,7 @@ export default function FriendsPage() {
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                     />
-                    {query && <button className={styles.searchClear} onClick={() => setQuery('')}>✕</button>}
+                    {query && <button className={styles.searchClear} onClick={() => setQuery('')}><IcX /></button>}
                 </div>
 
                 {searchResults && (

@@ -29,7 +29,7 @@ export default function ProfilePage() {
             const updated = await api.patch('/auth/me', { displayName, bio });
             setUser(updated);
             setEditing(false);
-            showToast('Profil zaktualizowany ✓', 'success');
+            showToast('Profil zaktualizowany', 'success');
         } catch (err) {
             showToast(err.message, 'error');
         } finally {

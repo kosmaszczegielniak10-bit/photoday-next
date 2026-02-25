@@ -41,7 +41,7 @@ export default function AuthPage() {
         <div className={styles.page}>
             {/* Hero gradient */}
             <div className={styles.hero}>
-                <div className={styles.appIcon}>📅</div>
+                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.appIcon} style={{ width: 64, height: 64 }} />
                 <h1 className={styles.appName}>PhotoDay</h1>
                 <p className={styles.tagline}>Twój prywatny dziennik fotograficzny</p>
             </div>

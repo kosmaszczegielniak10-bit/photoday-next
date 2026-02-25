@@ -81,7 +81,7 @@ export default function CapturePage() {
                 ...(photoData ? { photoPath: photoData } : {}),
             });
 
-            showToast('Wpis zapisany ✓', 'success');
+            showToast('Wpis zapisany', 'success');
             router.push('/app/calendar');
         } catch (err) {
             showToast(err.message || 'Błąd zapisywania', 'error');

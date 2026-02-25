@@ -10,18 +10,17 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Email/nazwa użytkownika i hasło są wymagane' }, { status: 400 });
         }
 
-        const db = createAdminClient();
         const identifier = email.toLowerCase().trim();
 
         // Try email first, then username
-        let { data: user } = await db.from('users')
+        let { data: user } = await supabaseAdmin.from('users')
             .select('id, username, display_name, email, bio, avatar_path, password_hash, created_at')
             .eq('email', identifier)
             .maybeSingle();
 
         // Fallback: try username
         if (!user) {
-            const result = await db.from('users')
+            const result = await supabaseAdmin.from('users')
                 .select('id, username, display_name, email, bio, avatar_path, password_hash, created_at')
                 .eq('username', identifier)
                 .maybeSingle();

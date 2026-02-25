@@ -14,10 +14,8 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Hasło musi mieć co najmniej 6 znaków' }, { status: 400 });
         }
 
-        const db = createAdminClient();
-
         // Check unique constraints
-        const { data: existing } = await db.from('users')
+        const { data: existing } = await supabaseAdmin.from('users')
             .select('id')
             .or(`email.eq.${email},username.eq.${username}`)
             .single();

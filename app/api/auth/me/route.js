@@ -8,8 +8,7 @@ export async function GET(request) {
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
-        const db = createAdminClient();
-        const { data: user } = await db.from('users')
+        const { data: user } = await supabaseAdmin.from('users')
             .select('id, username, display_name, email, bio, avatar_path, created_at')
             .eq('id', userId)
             .single();
@@ -27,8 +26,7 @@ export async function PATCH(request) {
 
     try {
         const { displayName, bio } = await request.json();
-        const db = createAdminClient();
-        const { data: user } = await db.from('users')
+        const { data: user } = await supabaseAdmin.from('users')
             .update({ display_name: displayName, bio })
             .eq('id', userId)
             .select('id, username, display_name, email, bio, avatar_path, created_at')
