@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import { createAdminClient } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function GET(request, { params }) {
     const userId = await requireAuth(request);

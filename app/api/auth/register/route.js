@@ -1,7 +1,7 @@
 // app/api/auth/register/route.js
 import { NextResponse } from 'next/server';
 import { hashPassword, signToken } from '@/lib/auth';
-import { createAdminClient } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(request) {
     try {

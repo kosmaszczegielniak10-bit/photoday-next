@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import { createAdminClient } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase';
 
 async function getOrCreateConversation(db, userId, partnerId) {
     const ua = Math.min(userId, partnerId);
