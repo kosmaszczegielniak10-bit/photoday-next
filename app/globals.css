@@ -1,37 +1,40 @@
 /* PhotoDay 2.0 — Global CSS Design System
    Ported from the original style.css design tokens */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap');
 
 /* ── Design Tokens ─────────────────────────────── */
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Brand colors */
-  --accent-orange: #f97316;
-  --accent-pink: #ec4899;
+  --accent-orange: #d45113;
+  --accent-pink: #d45113;
   --accent-teal: #20a39e;
-  --accent-purple: #8b5cf6;
-  --accent-red: #ef4444;
-  --accent-green: #22c55e;
-  --accent-yellow: #f59e0b;
+  --accent-purple: #20a39e;
+  --accent-red: #d45113;
+  --accent-green: #20a39e;
+  --accent-yellow: #d45113;
 
   /* Light mode */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --bg-card: #ffffff;
-  --bg-elevated: #f9f9fb;
+  --bg-primary: #ffffc7;
+  --bg-secondary: #dfefca;
+  --bg-tertiary: #c8deb0;
+  --bg-card: rgba(255, 255, 199, 0.7);
+  --bg-elevated: rgba(255, 255, 199, 0.9);
+  --bg-glass: rgba(29, 52, 97, 0.05);
 
-  --text-primary: #1a1a2e;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
+  --text-primary: #1d3461;
+  --text-secondary: #264073;
+  --text-tertiary: rgba(29, 52, 97, 0.55);
 
-  --border: #e5e7eb;
-  --border-subtle: #f3f4f6;
+  --border: rgba(29, 52, 97, 0.15);
+  --border-subtle: rgba(29, 52, 97, 0.08);
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.10);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.14);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -46,17 +49,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: #0f0f14;
-    --bg-secondary: #1a1a24;
-    --bg-card: #1f1f2c;
-    --bg-elevated: #252535;
+    --bg-primary: #0f1f3a;
+    --bg-secondary: #1d3461;
+    --bg-tertiary: #264073;
+    --bg-card: rgba(29, 52, 97, 0.6);
+    --bg-elevated: rgba(29, 52, 97, 0.8);
+    --bg-glass: rgba(223, 239, 202, 0.05);
 
-    --text-primary: #f1f1f3;
-    --text-secondary: #9ca3af;
-    --text-tertiary: #6b7280;
+    --text-primary: #ffffc7;
+    --text-secondary: #dfefca;
+    --text-tertiary: rgba(223, 239, 202, 0.55);
 
-    --border: #2d2d40;
-    --border-subtle: #232335;
+    --border: rgba(223, 239, 202, 0.15);
+    --border-subtle: rgba(223, 239, 202, 0.08);
   }
 }
 

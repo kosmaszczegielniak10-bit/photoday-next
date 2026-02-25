@@ -21,11 +21,11 @@ export default function Home() {
       position: 'fixed', inset: 0,
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      background: 'linear-gradient(135deg, #f97316, #ec4899)',
-      gap: 12,
+      background: 'var(--bg-primary)',
+      gap: 16,
     }}>
-      <div style={{ fontSize: 48 }}>📅</div>
-      <div style={{ color: 'white', fontSize: 24, fontWeight: 800, letterSpacing: -0.5 }}>PhotoDay</div>
+      <img src="/logo.svg" alt="PhotoDay Logo" style={{ width: 120, height: 120 }} />
+      <div style={{ color: 'var(--text-primary)', fontSize: 24, fontWeight: 800, letterSpacing: -0.5 }}>PhotoDay</div>
     </div>
   );
 }

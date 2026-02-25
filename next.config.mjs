@@ -4,20 +4,13 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'drcmantndmqrcwpcezoy.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        hostname: '**.supabase.co',
       },
       {
         protocol: 'https',
         hostname: 'ui-avatars.com',
       },
     ],
-  },
-  // Allow large file uploads via API routes
-  api: {
-    bodyParser: {
-      sizeLimit: '25mb',
-    },
   },
 };
 

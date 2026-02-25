@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 230" fill="none">
+  <!-- D-shaped camera shutter with heart – PhotoDay logo (PINK) -->
+  <defs>
+    <clipPath id="d-shape">
+      <path d="M20,20 L20,190 Q20,210 40,210 L100,210 Q180,210 180,130 L180,100 Q180,20 100,20 Z"/>
+    </clipPath>
+  </defs>
+  
+  <g clip-path="url(#d-shape)">
+    <path d="M20,20 L20,190 Q20,210 40,210 L100,210 Q180,210 180,130 L180,100 Q180,20 100,20 Z" fill="#E84C88"/>
+    
+    <!-- Shutter blades -->
+    <path d="M100,20 L155,50 Q120,85 105,100 L85,80 Q60,55 100,20Z" fill="#D63B75"/>
+    <path d="M155,50 L180,100 Q145,100 115,105 L105,100 Q130,70 155,50Z" fill="#E04580"/>
+    <path d="M180,100 L170,160 Q135,135 115,115 L115,105 Q150,100 180,100Z" fill="#D63B75"/>
+    <path d="M170,160 L100,210 Q105,170 105,140 L115,115 Q140,140 170,160Z" fill="#E04580"/>
+    <path d="M100,210 L20,190 Q55,165 80,140 L105,140 Q100,175 100,210Z" fill="#D63B75"/>
+    <path d="M20,190 L20,20 Q50,55 75,80 L80,140 Q50,165 20,190Z" fill="#E04580"/>
+
+    <!-- White separator curves -->
+    <path d="M100,20 Q85,65 85,80" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M155,50 Q130,70 105,100" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M180,100 Q150,100 115,105" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M170,160 Q140,140 115,115" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M100,210 Q100,175 105,140" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M20,190 Q55,165 80,140" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M20,20 Q50,55 75,80" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Center area -->
+  <circle cx="100" cy="115" r="22" fill="#E84C88"/>
+  
+  <!-- Heart in center -->
+  <path d="M100,107 C100,102 94,97 89,102 C84,107 88,113 100,124 C112,113 116,107 111,102 C106,97 100,102 100,107Z" fill="white"/>
+</svg>

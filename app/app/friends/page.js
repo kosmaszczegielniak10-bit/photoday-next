@@ -16,7 +16,7 @@ const IcUsers = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
 
 function avatarUrl(path, name) {
     if (path?.startsWith('http')) return path;
-    if (path) return `/uploads/${path}`;
+    if (path) return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${path}`;
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&size=80&background=random&color=fff`;
 }
 

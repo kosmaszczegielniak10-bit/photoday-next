@@ -45,9 +45,9 @@ const IcUsers = () => (
 
 const NAV_ITEMS = [
     { href: '/app/calendar', label: 'Kalendarz', Icon: IcCalendar },
-    { href: '/app/feed', label: 'Newsy', Icon: IcFeed },
+    { href: '/app/feed', label: 'Znajomi', Icon: IcFeed },
     { href: '/app/capture', label: '', Icon: IcCapture, capture: true },
-    { href: '/app/friends', label: 'Znajomi', Icon: IcUsers },
+    { href: '/app/friends', label: 'Wiadomości', Icon: IcUsers },
     { href: '/app/profile', label: 'Profil', Icon: IcProfile },
 ];
 
@@ -63,7 +63,7 @@ export default function AppLayout({ children }) {
     if (loading) {
         return (
             <div className={styles.splash}>
-                <div className={styles.splashIcon}>📅</div>
+                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
                 <div className={styles.splashName}>PhotoDay</div>
             </div>
         );

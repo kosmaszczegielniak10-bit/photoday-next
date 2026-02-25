@@ -19,7 +19,7 @@ export default function ProfilePage() {
     const [saving, setSaving] = useState(false);
 
     const av = user?.avatar_path
-        ? (user.avatar_path.startsWith('http') ? user.avatar_path : `/uploads/${user.avatar_path}`)
+        ? (user.avatar_path.startsWith('http') ? user.avatar_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${user.avatar_path}`)
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.display_name || 'U')}&size=120&background=random&color=fff`;
 
     const saveProfile = async () => {

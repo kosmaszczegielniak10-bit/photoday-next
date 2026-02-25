@@ -110,7 +110,7 @@ export default function MessagesPage() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="22" height="22"><polyline points="15 18 9 12 15 6" /></svg>
                     </button>
                     {partner.avatar && (
-                        <img src={partner.avatar.startsWith('http') ? partner.avatar : `/uploads/${partner.avatar}`} alt="" className={styles.chatAvatar} />
+                        <img src={partner.avatar.startsWith('http') ? partner.avatar : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${partner.avatar}`} alt="" className={styles.chatAvatar} />
                     )}
                     <span className={styles.chatName}>{partner.name}</span>
                 </div>
@@ -188,7 +188,7 @@ export default function MessagesPage() {
                 <div>
                     {conversations.map(c => {
                         const av = c.avatar_path
-                            ? (c.avatar_path.startsWith('http') ? c.avatar_path : `/uploads/${c.avatar_path}`)
+                            ? (c.avatar_path.startsWith('http') ? c.avatar_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${c.avatar_path}`)
                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.display_name || c.username)}&size=52&background=random&color=fff`;
                         return (
                             <div key={c.partner_id} className={styles.convRow} onClick={() => openChat(c.partner_id, c.display_name || c.username, c.avatar_path)}>

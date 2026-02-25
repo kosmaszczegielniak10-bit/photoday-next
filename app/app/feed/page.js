@@ -20,7 +20,7 @@ const IcX = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 // ── Avatar Helper ──────────────────────────────────
 function avatarUrl(path, name) {
     if (path?.startsWith('http')) return path;
-    if (path) return `/uploads/${path}`;
+    if (path) return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${path}`;
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&size=80&background=random&color=fff`;
 }
 
@@ -71,7 +71,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
     const av = avatarUrl(post.author_avatar, post.author_name);
     const photoSrc = post.photo_path?.startsWith('http')
         ? post.photo_path
-        : post.photo_path ? `/uploads/${post.photo_path}` : null;
+        : post.photo_path ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${post.photo_path}` : null;
 
     const handleComment = async () => {
         if (!comment.trim() || submitting) return;
@@ -231,7 +231,7 @@ function NewPostModal({ onClose, onPost }) {
 
 // ── Story Viewer ──────────────────────────────────
 function StoryViewer({ story, onClose }) {
-    const src = story.photo_path?.startsWith('http') ? story.photo_path : `/uploads/${story.photo_path}`;
+    const src = story.photo_path?.startsWith('http') ? story.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${story.photo_path}`;
     return (
         <div className={styles.storyViewer} onClick={onClose}>
             <img src={src} alt="" className={styles.storyViewerImg} />

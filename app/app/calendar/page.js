@@ -119,7 +119,7 @@ export default function CalendarPage() {
                         >
                             {e?.photo_path ? (
                                 <img
-                                    src={e.photo_path.startsWith('http') ? e.photo_path : `/uploads/${e.photo_path}`}
+                                    src={e.photo_path.startsWith('http') ? e.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${e.photo_path}`}
                                     alt=""
                                     className={styles.cellThumb}
                                     loading="lazy"
@@ -149,7 +149,7 @@ export default function CalendarPage() {
                         <div className={styles.entryPreview}>
                             {entry.photo_path && (
                                 <img
-                                    src={entry.photo_path.startsWith('http') ? entry.photo_path : `/uploads/${entry.photo_path}`}
+                                    src={entry.photo_path.startsWith('http') ? entry.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${entry.photo_path}`}
                                     alt=""
                                     className={styles.entryPhoto}
                                 />

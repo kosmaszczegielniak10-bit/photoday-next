@@ -41,7 +41,7 @@ export default function CapturePage() {
                     setMood(e.mood || '');
                     setPrivacy(e.privacy || 'private');
                     if (e.photo_path) {
-                        setPhotoPreview(e.photo_path.startsWith('http') ? e.photo_path : `/uploads/${e.photo_path}`);
+                        setPhotoPreview(e.photo_path.startsWith('http') ? e.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${e.photo_path}`);
                     }
                 }
             })
