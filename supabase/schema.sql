@@ -158,8 +158,11 @@ CREATE TABLE IF NOT EXISTS conversations (
   user_a          BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   user_b          BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   last_message_at BIGINT DEFAULT (EXTRACT(EPOCH FROM NOW()) * 1000)::BIGINT,
-  UNIQUE(LEAST(user_a, user_b), GREATEST(user_a, user_b))
+  -- user_a is always the smaller ID (enforced at API layer: user_a = MIN, user_b = MAX)
+  CHECK (user_a < user_b),
+  UNIQUE(user_a, user_b)
 );
+
 
 CREATE TABLE IF NOT EXISTS messages (
   id              BIGSERIAL PRIMARY KEY,
