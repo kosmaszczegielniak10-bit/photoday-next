@@ -177,7 +177,7 @@ export default function MessagesPage() {
                         </div>
                     ))}
                 </div>
-            ) : conversations.length === 0 ? (
+            ) : !Array.isArray(conversations) || conversations.length === 0 ? (
                 <div className={styles.empty}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" width="56" height="56" style={{ opacity: .3 }}>
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -189,7 +189,7 @@ export default function MessagesPage() {
                 <div>
                     {conversations.map(c => {
                         const av = c.avatar_path
-                            ? (c.avatar_path.startsWith('http') ? c.avatar_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${c.avatar_path}`)
+                            ? getStorageUrl(c.avatar_path)
                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.display_name || c.username)}&size=52&background=random&color=fff`;
                         return (
                             <div key={c.partner_id} className={styles.convRow} onClick={() => openChat(c.partner_id, c.display_name || c.username, c.avatar_path)}>
