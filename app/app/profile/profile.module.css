@@ -1,0 +1,128 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: var(--bg-primary);
+    overflow-y: auto;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px 24px;
+    border-bottom: 1px solid var(--border-subtle);
+    gap: 8px;
+}
+
+.avatarWrap {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--border);
+    margin-bottom: 4px;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.name {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -.5px;
+}
+
+.username {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    font-weight: 400;
+}
+
+.bio {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+.editBtn {
+    margin-top: 8px;
+    padding: 9px 24px;
+    font-size: 14px;
+}
+
+.editForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.bioInput {
+    resize: none;
+    font-family: var(--font-sans);
+}
+
+.menu {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.menuSection {
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.menuItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background .15s;
+}
+
+.menuItem:last-child {
+    border-bottom: none;
+}
+
+.menuItem:hover {
+    background: var(--bg-secondary);
+}
+
+.menuIcon {
+    display: flex;
+    align-items: center;
+    color: var(--text-secondary);
+}
+
+.menuLabel {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.danger .menuLabel {
+    color: var(--accent-red);
+}
+
+.danger .menuIcon {
+    color: var(--accent-red);
+}

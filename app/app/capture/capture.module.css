@@ -1,0 +1,141 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--bg-primary);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.back {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    display: flex;
+    padding: 4px;
+}
+
+.title {
+    font-size: 17px;
+    font-weight: 700;
+    flex: 1;
+    color: var(--text-primary);
+}
+
+.datePicker {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.photoArea {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--bg-secondary);
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 320px;
+    overflow: hidden;
+}
+
+.photoPlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+.fileInput {
+    display: none;
+}
+
+.form {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.textarea {
+    resize: none;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.moods {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.moodBtn {
+    font-size: 24px;
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all .15s;
+    line-height: 1;
+}
+
+.moodActive {
+    border-color: var(--accent-orange);
+    background: rgba(249, 115, 22, .1);
+}
+
+.privacyRow {
+    display: flex;
+    gap: 8px;
+}
+
+.privacyBtn {
+    flex: 1;
+    padding: 9px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .2s;
+    font-family: var(--font-sans);
+}
+
+.privacyActive {
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    font-weight: 700;
+}

@@ -1,0 +1,124 @@
+.shell {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--bg-primary);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ── Splash (loading state) ─────────────────── */
+.splash {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #f97316, #ec4899);
+}
+
+.splashIcon {
+    font-size: 52px;
+}
+
+.splashName {
+    color: white;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* ── Bottom Nav ─────────────────────────────── */
+.nav {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-subtle);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.navInner {
+    display: flex;
+    align-items: center;
+    height: 58px;
+    padding: 0 4px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.navItem {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 100%;
+    text-decoration: none;
+    color: var(--text-tertiary);
+    transition: color 0.2s;
+    border-radius: var(--radius-md);
+    padding: 4px 0;
+}
+
+.navItem:hover {
+    color: var(--text-secondary);
+}
+
+.navItemActive {
+    color: var(--accent-orange);
+}
+
+.navItemActive .navIcon svg {
+    stroke: var(--accent-orange);
+}
+
+.navIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navLabel {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+/* ── Capture FAB ────────────────────────────── */
+.captureBtn {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4);
+    margin: 0 8px;
+    flex: unset;
+    transition: transform 0.15s;
+}
+
+.captureBtn:hover {
+    transform: scale(1.06);
+}
+
+.captureBtn:active {
+    transform: scale(0.94);
+}
