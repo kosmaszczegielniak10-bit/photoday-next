@@ -96,15 +96,18 @@ export default function AuthPage() {
                     )}
 
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Email</label>
+                        <label className={styles.label}>
+                            {mode === 'login' ? 'Email lub nazwa użytkownika' : 'Email'}
+                        </label>
                         <input
                             className="input"
-                            type="email"
-                            placeholder="email@example.com"
+                            type={mode === 'login' ? 'text' : 'email'}
+                            placeholder={mode === 'login' ? 'email lub @username' : 'email@example.com'}
                             value={form.email}
                             onChange={update('email')}
                             required
                             autoCapitalize="none"
+                            autoCorrect="off"
                         />
                     </div>
 

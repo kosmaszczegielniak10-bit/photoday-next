@@ -7,22 +7,34 @@ export async function POST(request) {
     try {
         const { email, password } = await request.json();
         if (!email || !password) {
-            return NextResponse.json({ error: 'Email i hasło są wymagane' }, { status: 400 });
+            return NextResponse.json({ error: 'Email/nazwa użytkownika i hasło są wymagane' }, { status: 400 });
         }
 
         const db = createAdminClient();
-        const { data: user } = await db.from('users')
+        const identifier = email.toLowerCase().trim();
+
+        // Try email first, then username
+        let { data: user } = await db.from('users')
             .select('id, username, display_name, email, bio, avatar_path, password_hash, created_at')
-            .eq('email', email.toLowerCase().trim())
-            .single();
+            .eq('email', identifier)
+            .maybeSingle();
+
+        // Fallback: try username
+        if (!user) {
+            const result = await db.from('users')
+                .select('id, username, display_name, email, bio, avatar_path, password_hash, created_at')
+                .eq('username', identifier)
+                .maybeSingle();
+            user = result.data;
+        }
 
         if (!user) {
-            return NextResponse.json({ error: 'Nieprawidłowy email lub hasło' }, { status: 401 });
+            return NextResponse.json({ error: 'Nieprawidłowy email/nazwa użytkownika lub hasło' }, { status: 401 });
         }
 
         const valid = await verifyPassword(password, user.password_hash);
         if (!valid) {
-            return NextResponse.json({ error: 'Nieprawidłowy email lub hasło' }, { status: 401 });
+            return NextResponse.json({ error: 'Nieprawidłowy email/nazwa użytkownika lub hasło' }, { status: 401 });
         }
 
         const token = signToken(user.id);
