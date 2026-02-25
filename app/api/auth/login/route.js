@@ -37,7 +37,7 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Nieprawidłowy email/nazwa użytkownika lub hasło' }, { status: 401 });
         }
 
-        const token = signToken(user.id);
+        const token = signToken(user);
         const { password_hash: _, ...safeUser } = user;
 
         const res = NextResponse.json({ user: safeUser, token });
