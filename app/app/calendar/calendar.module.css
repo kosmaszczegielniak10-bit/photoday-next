@@ -38,57 +38,63 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Month nav */
+/* Page Header & Month Nav */
 .monthNav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px 12px;
+    padding: 16px 20px 12px;
 }
 
 .monthTitle {
-    font-size: 17px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
     color: var(--text-primary);
+    letter-spacing: -1px;
+    font-family: var(--font-display);
 }
 
 .navArrow {
-    background: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
     border: none;
     cursor: pointer;
-    color: var(--text-secondary);
-    padding: 6px;
-    border-radius: 8px;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: background 0.15s;
 }
 
 .navArrow:hover {
-    background: var(--bg-secondary);
+    background: var(--bg-tertiary);
 }
 
 /* Grid */
 .grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 3px;
-    padding: 0 10px;
+    gap: 6px;
+    padding: 0 16px;
 }
 
 .dayHeader {
     text-align: center;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-tertiary);
-    padding: 4px 0 8px;
+    padding: 8px 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Cell */
 .cell {
     position: relative;
     aspect-ratio: 1;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     border: none;
     background: var(--bg-secondary);
     cursor: pointer;
@@ -96,16 +102,19 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    padding: 3px;
-    transition: transform 0.12s;
+    padding: 6px;
+    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
 .cell:hover {
-    transform: scale(1.04);
+    transform: scale(1.08);
+    z-index: 10;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .cell:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 .cellThumb {
@@ -119,51 +128,57 @@
 .cellDay {
     position: relative;
     z-index: 1;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     color: var(--text-primary);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
     line-height: 1;
 }
 
 .cellDot {
     position: absolute;
-    bottom: 4px;
-    right: 4px;
-    width: 5px;
-    height: 5px;
+    top: 6px;
+    right: 6px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--accent-orange);
     z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cellToday {
-    box-shadow: 0 0 0 2px var(--accent-teal);
+    box-shadow: inset 0 0 0 2px var(--accent-teal);
 }
 
 .cellSelected {
-    box-shadow: 0 0 0 2.5px var(--accent-orange);
+    box-shadow: inset 0 0 0 3px var(--accent-orange);
+    transform: scale(1.05);
 }
 
 .cellHasEntry .cellDay {
     color: white;
 }
 
-/* Day detail */
+/* Day detail (Floating Card) */
 .dayDetail {
-    margin: 16px;
+    margin: 24px 20px 120px;
+    /* Leave space for floating bottom nav */
     background: var(--bg-card);
-    border-radius: 16px;
+    border-radius: var(--radius-2xl);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    animation: slideUp 0.25s ease;
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dayDetailHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 16px;
+    padding: 20px;
     border-bottom: 1px solid var(--border-subtle);
 }
 

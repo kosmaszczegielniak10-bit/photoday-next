@@ -71,17 +71,36 @@
 }
 
 .menu {
-    padding: 20px 16px;
+    padding: 24px 20px 120px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+}
+
+/* Page Header */
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px 0;
+}
+
+.pageTitle {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    font-family: var(--font-display);
 }
 
 .menuSection {
     background: var(--bg-card);
-    border-radius: 16px;
+    border-radius: var(--radius-2xl);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
 }
 
 .menuItem {

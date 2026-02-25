@@ -78,31 +78,32 @@ export default function AppLayout({ children }) {
 
             <nav className={styles.nav}>
                 <div className={styles.navInner}>
-                    {NAV_ITEMS.map(({ href, label, Icon, capture }) => {
-                        // Albums is nested under calendar
+                    {NAV_ITEMS.filter(item => !item.capture).map(({ href, label, Icon }) => {
                         const isActive = pathname === href ||
                             (href === '/app/calendar' && pathname.startsWith('/app/albums'));
-
-                        if (capture) {
-                            return (
-                                <Link key={href} href={href} className={styles.captureBtn} aria-label="Dodaj zdjęcie">
-                                    <Icon />
-                                </Link>
-                            );
-                        }
 
                         return (
                             <Link
                                 key={href}
                                 href={href}
                                 className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
+                                aria-label={label}
                             >
                                 <span className={styles.navIcon}><Icon /></span>
-                                <span className={styles.navLabel}>{label}</span>
                             </Link>
                         );
                     })}
                 </div>
+
+                {NAV_ITEMS.find(item => item.capture) && (
+                    <Link
+                        href={NAV_ITEMS.find(item => item.capture).href}
+                        className={styles.captureBtn}
+                        aria-label="Dodaj zdjęcie"
+                    >
+                        <IcCapture />
+                    </Link>
+                )}
             </nav>
         </div>
     );

@@ -36,10 +36,11 @@
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
   --radius-full: 9999px;
 
   /* Navigation */
@@ -284,7 +285,7 @@ body {
   gap: 8px;
   padding: 12px 20px;
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 600;

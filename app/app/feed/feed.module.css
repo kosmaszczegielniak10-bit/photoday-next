@@ -108,28 +108,76 @@
     stroke-width: 3;
 }
 
+/* Page Header */
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px 0;
+}
+
+.pageTitle {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    font-family: var(--font-display);
+}
+
+.headerActions {
+    display: flex;
+    gap: 12px;
+}
+
+.iconBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.iconBtn:hover {
+    background: var(--bg-tertiary);
+}
+
 /* Posts */
 .posts {
     display: flex;
     flex-direction: column;
+    gap: 24px;
+    padding: 20px;
+    padding-bottom: 120px;
+    /* Space for the new floating nav */
 }
 
 .postCard {
-    border-bottom: 8px solid var(--bg-secondary);
-    background: var(--bg-primary);
-    padding-bottom: 4px;
+    background: var(--bg-card);
+    border-radius: var(--radius-2xl);
+    padding-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
 }
 
 .postHeader {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 16px 10px;
+    gap: 12px;
+    padding: 16px 16px 12px;
 }
 
 .postAvatar {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
     border: 1.5px solid var(--border-subtle);
@@ -141,36 +189,45 @@
 }
 
 .postAuthor {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-primary);
+    letter-spacing: -0.2px;
 }
 
 .postTime {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-tertiary);
+    font-weight: 500;
 }
 
 .deleteBtn {
-    background: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
     border: none;
     color: var(--text-tertiary);
     cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
 .deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
     color: var(--accent-red);
 }
 
 .postPhoto {
-    width: 100%;
+    width: calc(100% - 24px);
+    margin: 0 auto;
     display: block;
-    aspect-ratio: 1;
+    aspect-ratio: 4/5;
     object-fit: cover;
-    max-height: 480px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .postCaption {

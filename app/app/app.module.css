@@ -39,49 +39,66 @@
     letter-spacing: -0.5px;
 }
 
-/* ── Bottom Nav ─────────────────────────────── */
+/* ── Bottom Nav (Floating Glass Pill) ── */
 .nav {
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-subtle);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    flex-shrink: 0;
+    position: fixed;
+    bottom: max(24px, env(safe-area-inset-bottom, 24px));
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     z-index: 100;
+    pointer-events: none;
+    /* Let clicks pass through empty space */
 }
 
 .navInner {
     display: flex;
     align-items: center;
-    height: 58px;
-    padding: 0 4px;
-    max-width: 500px;
-    margin: 0 auto;
+    height: 64px;
+    padding: 0 24px;
+    gap: 24px;
+    background: rgba(255, 255, 255, 0.85);
+    /* Glassmorphism */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 32px;
+    box-shadow: 0 8px 32px rgba(28, 25, 56, 0.08);
+    /* Twilight Indigo shadow tint */
+    pointer-events: auto;
+}
+
+[data-theme='dark'] .navInner {
+    background: rgba(28, 25, 56, 0.7);
+    /* Twilight Indigo transparent */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .navItem {
-    flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    height: 100%;
     text-decoration: none;
-    color: var(--text-tertiary);
-    transition: color 0.2s;
-    border-radius: var(--radius-md);
-    padding: 4px 0;
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
 .navItem:hover {
-    color: var(--text-secondary);
+    transform: scale(1.1);
 }
 
 .navItemActive {
-    color: var(--accent-orange);
+    color: var(--text-primary);
 }
 
-.navItemActive .navIcon svg {
-    stroke: var(--accent-orange);
+.navItemActive svg {
+    stroke-width: 2.5;
+    /* Bold active state */
 }
 
 .navIcon {
@@ -91,34 +108,32 @@
 }
 
 .navLabel {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    white-space: nowrap;
+    display: none;
+    /* Fully icon-based in new UI */
 }
 
-/* ── Capture FAB ────────────────────────────── */
+/* ── Capture FAB (Floating Action Button) ── */
 .captureBtn {
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-pink));
-    color: white;
+    background: var(--text-primary);
+    /* Dark circle as per reference */
+    color: var(--bg-primary);
+    /* White/Cream cross */
     display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4);
-    margin: 0 8px;
-    flex: unset;
-    transition: transform 0.15s;
+    box-shadow: 0 12px 32px rgba(28, 25, 56, 0.25);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
 }
 
 .captureBtn:hover {
-    transform: scale(1.06);
+    transform: scale(1.08) rotate(90deg);
 }
 
 .captureBtn:active {
-    transform: scale(0.94);
+    transform: scale(0.95);
 }

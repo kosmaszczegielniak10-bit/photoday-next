@@ -44,6 +44,11 @@ export default function ProfilePage() {
 
     return (
         <div className={styles.page}>
+            {/* Header */}
+            <div className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>Profil</h1>
+            </div>
+
             {/* Avatar + name */}
             <div className={styles.hero}>
                 <div className={styles.avatarWrap}>

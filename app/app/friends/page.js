@@ -128,7 +128,10 @@ export default function FriendsPage() {
 
     return (
         <div className={styles.page}>
-            <h1 className={styles.title}>Znajomi</h1>
+            {/* Header */}
+            <div className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>Znajomi</h1>
+            </div>
 
             {/* Search */}
             <div className={styles.searchSection}>
