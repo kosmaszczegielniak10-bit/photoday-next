@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { api } from '@/lib/api';
+import { getStorageUrl } from '@/lib/storage';
 import styles from './feed.module.css';
 
 // ── Icons ──────────────────────────────────────────
@@ -20,7 +21,7 @@ const IcX = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 // ── Avatar Helper ──────────────────────────────────
 function avatarUrl(path, name) {
     if (path?.startsWith('http')) return path;
-    if (path) return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${path}`;
+    if (path) return getStorageUrl(path);
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'U')}&size=80&background=random&color=fff`;
 }
 
@@ -231,7 +232,7 @@ function NewPostModal({ onClose, onPost }) {
 
 // ── Story Viewer ──────────────────────────────────
 function StoryViewer({ story, onClose }) {
-    const src = story.photo_path?.startsWith('http') ? story.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${story.photo_path}`;
+    const src = getStorageUrl(story.photo_path);
     return (
         <div className={styles.storyViewer} onClick={onClose}>
             <img src={src} alt="" className={styles.storyViewerImg} />

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { api } from '@/lib/api';
+import { getStorageUrl } from '@/lib/storage';
 import styles from './profile.module.css';
 
 export default function ProfilePage() {
@@ -19,7 +20,7 @@ export default function ProfilePage() {
     const [saving, setSaving] = useState(false);
 
     const av = user?.avatar_path
-        ? (user.avatar_path.startsWith('http') ? user.avatar_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${user.avatar_path}`)
+        ? getStorageUrl(user.avatar_path)
         : `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.display_name || 'U')}&size=120&background=random&color=fff`;
 
     const saveProfile = async () => {

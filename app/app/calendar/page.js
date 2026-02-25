@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
+import { getStorageUrl } from '@/lib/storage';
 import styles from './calendar.module.css';
 
 const MONTHS_PL = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
@@ -119,7 +120,7 @@ export default function CalendarPage() {
                         >
                             {e?.photo_path ? (
                                 <img
-                                    src={e.photo_path.startsWith('http') ? e.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${e.photo_path}`}
+                                    src={getStorageUrl(e.photo_path)}
                                     alt=""
                                     className={styles.cellThumb}
                                     loading="lazy"
@@ -149,7 +150,7 @@ export default function CalendarPage() {
                         <div className={styles.entryPreview}>
                             {entry.photo_path && (
                                 <img
-                                    src={entry.photo_path.startsWith('http') ? entry.photo_path : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${entry.photo_path}`}
+                                    src={getStorageUrl(entry.photo_path)}
                                     alt=""
                                     className={styles.entryPhoto}
                                 />

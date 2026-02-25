@@ -6,6 +6,7 @@ import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { supabase } from '@/lib/supabase';
+import { getStorageUrl } from '@/lib/storage';
 import styles from './messages.module.css';
 
 export default function MessagesPage() {
@@ -110,7 +111,7 @@ export default function MessagesPage() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="22" height="22"><polyline points="15 18 9 12 15 6" /></svg>
                     </button>
                     {partner.avatar && (
-                        <img src={partner.avatar.startsWith('http') ? partner.avatar : `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${partner.avatar}`} alt="" className={styles.chatAvatar} />
+                        <img src={getStorageUrl(partner.avatar)} alt="" className={styles.chatAvatar} />
                     )}
                     <span className={styles.chatName}>{partner.name}</span>
                 </div>
