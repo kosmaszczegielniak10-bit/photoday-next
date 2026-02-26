@@ -4,9 +4,13 @@
     height: 100dvh;
     overflow: hidden;
     background: var(--bg-primary);
-    max-width: 600px;
+    max-width: 480px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
 }
 
 .main {
@@ -18,7 +22,7 @@
 
 /* ── Splash (loading state) ─────────────────── */
 .splash {
-    position: fixed;
+    position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
@@ -26,6 +30,7 @@
     justify-content: center;
     gap: 12px;
     background: var(--bg-primary);
+    z-index: 1000;
 }
 
 .splashIcon {
@@ -39,33 +44,26 @@
     letter-spacing: -0.5px;
 }
 
-/* ── Bottom Nav (Floating Glass Pill) ── */
+/* ── Bottom Nav (Native Standard) ── */
 .nav {
-    position: fixed;
-    bottom: max(24px, env(safe-area-inset-bottom, 24px));
-    left: 20px;
-    right: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
-    pointer-events: none;
-    /* Let clicks pass through empty space */
 }
 
 .navInner {
     display: flex;
     align-items: center;
+    justify-content: space-around;
     height: 64px;
-    padding: 0 24px;
-    gap: 24px;
-    background: rgba(255, 255, 255, 0.85);
-    /* Glassmorphism */
+    padding: 0 16px env(safe-area-inset-bottom, 0px);
+    background: rgba(252, 250, 248, 0.85);
+    /* New light beige glass */
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-radius: 32px;
-    box-shadow: 0 8px 32px rgba(28, 25, 56, 0.08);
-    /* Twilight Indigo shadow tint */
+    border-top: 1px solid var(--border-subtle);
     pointer-events: auto;
 }
 
@@ -112,28 +110,27 @@
     /* Fully icon-based in new UI */
 }
 
-/* ── Capture FAB (Floating Action Button) ── */
-.captureBtn {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--text-primary);
-    /* Dark circle as per reference */
-    color: var(--bg-primary);
-    /* White/Cream cross */
+.navItemCapture {
+    width: 48px;
+    height: 48px;
+    background: var(--accent-orange);
+    color: white;
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 12px 32px rgba(28, 25, 56, 0.25);
+    margin: 0 8px;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    pointer-events: auto;
 }
 
-.captureBtn:hover {
-    transform: scale(1.08) rotate(90deg);
+.navItemCapture:hover {
+    transform: scale(1.05);
 }
 
-.captureBtn:active {
+.navItemCapture:active {
     transform: scale(0.95);
+}
+
+.navItemCapture svg {
+    stroke-width: 2.5;
 }

@@ -51,6 +51,8 @@ const NAV_ITEMS = [
     { href: '/app/profile', label: 'Profil', Icon: IcProfile },
 ];
 
+import Providers from '@/app/providers';
+
 export default function AppLayout({ children }) {
     const { user, loading } = useAuth();
     const router = useRouter();
@@ -62,23 +64,30 @@ export default function AppLayout({ children }) {
 
     if (loading) {
         return (
-            <div className={styles.splash}>
-                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
-                <div className={styles.splashName}>PhotoDay</div>
-            </div>
+            <Providers>
+                <div className={styles.splash}>
+                    <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
+                    <div className={styles.splashName}>PhotoDay</div>
+                </div>
+            </Providers>
         );
     }
     if (!user) return null;
 
     return (
         <div className={styles.shell}>
+            {/* Top Logo Header */}
+            <div style={{ padding: '16px 20px 0', display: 'flex', alignItems: 'center' }}>
+                <img src="/logo.svg" alt="PhotoDay Logo" style={{ width: 44, height: 44 }} />
+            </div>
+
             <main className={styles.main}>
                 {children}
             </main>
 
             <nav className={styles.nav}>
                 <div className={styles.navInner}>
-                    {NAV_ITEMS.filter(item => !item.capture).map(({ href, label, Icon }) => {
+                    {NAV_ITEMS.map(({ href, label, Icon, capture }) => {
                         const isActive = pathname === href ||
                             (href === '/app/calendar' && pathname.startsWith('/app/albums'));
 
@@ -86,24 +95,14 @@ export default function AppLayout({ children }) {
                             <Link
                                 key={href}
                                 href={href}
-                                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
-                                aria-label={label}
+                                className={`${styles.navItem} ${isActive ? styles.navItemActive : ''} ${capture ? styles.navItemCapture : ''}`}
+                                aria-label={label || 'Otwórz'}
                             >
                                 <span className={styles.navIcon}><Icon /></span>
                             </Link>
                         );
                     })}
                 </div>
-
-                {NAV_ITEMS.find(item => item.capture) && (
-                    <Link
-                        href={NAV_ITEMS.find(item => item.capture).href}
-                        className={styles.captureBtn}
-                        aria-label="Dodaj zdjęcie"
-                    >
-                        <IcCapture />
-                    </Link>
-                )}
             </nav>
         </div>
     );
