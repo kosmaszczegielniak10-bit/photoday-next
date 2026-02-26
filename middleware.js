@@ -4,28 +4,20 @@ export function middleware(request) {
     const token = request.cookies.get('photoday_token')?.value;
     const { pathname } = request.nextUrl;
 
-    // Protect /app routes
-    if (pathname.startsWith('/app')) {
-        if (!token) {
-            return NextResponse.redirect(new URL('/auth', request.url));
-        }
-    }
-
-    // Redirect logged-in users away from auth / landing
-    if (pathname.startsWith('/auth') || pathname === '/') {
-        if (token) {
-            return NextResponse.redirect(new URL('/app/calendar', request.url));
-        }
-    }
-
-    // If on root without token, redirect to auth
-    if (pathname === '/' && !token) {
+    // Fast path: if NO token at all, don't let them hit /app
+    // We do NOT block /app if token EXISTS because it might be invalid. We let the server component natively redirect it to /auth.
+    if (pathname.startsWith('/app') && !token) {
         return NextResponse.redirect(new URL('/auth', request.url));
+    }
+
+    // Fast path: root URL
+    if (pathname === '/') {
+        return NextResponse.redirect(new URL(token ? '/app/calendar' : '/auth', request.url));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/', '/app/:path*', '/auth'],
+    matcher: ['/', '/app/:path*'],
 };
