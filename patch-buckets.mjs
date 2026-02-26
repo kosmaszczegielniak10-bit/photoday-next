@@ -21,21 +21,13 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function fixBuckets() {
     console.log("Setting storage buckets to public...");
 
-    // 1. Photos bucket
-    let { error: pErr } = await supabase.storage.updateBucket('photos', { public: true });
+    // 1. Uploads bucket
+    let { error: pErr } = await supabase.storage.updateBucket('uploads', { public: true });
     if (pErr && pErr.message.includes('not found')) {
-        console.log("Creating 'photos' bucket...");
-        await supabase.storage.createBucket('photos', { public: true });
-    } else if (pErr) console.error("Error 'photos':", pErr.message);
-    else console.log("Success: 'photos' bucket is now public.");
-
-    // 2. Avatars bucket
-    let { error: aErr } = await supabase.storage.updateBucket('avatars', { public: true });
-    if (aErr && aErr.message.includes('not found')) {
-        console.log("Creating 'avatars' bucket...");
-        await supabase.storage.createBucket('avatars', { public: true });
-    } else if (aErr) console.error("Error 'avatars':", aErr.message);
-    else console.log("Success: 'avatars' bucket is now public.");
+        console.log("Creating 'uploads' bucket...");
+        await supabase.storage.createBucket('uploads', { public: true });
+    } else if (pErr) console.error("Error 'uploads':", pErr.message);
+    else console.log("Success: 'uploads' bucket is now public.");
 }
 
 fixBuckets();

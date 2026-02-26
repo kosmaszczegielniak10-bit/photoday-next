@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { date } = await params;
-    const db = createAdminClient();
+    const db = supabaseAdmin;
 
     const { data } = await db
         .from('entries')

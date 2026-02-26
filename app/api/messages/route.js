@@ -8,7 +8,7 @@ export async function GET(request) {
     const userId = await requireAuth(request);
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const db = createAdminClient();
+    const db = supabaseAdmin;
 
     const { data: convs, error } = await db
         .from('conversations')

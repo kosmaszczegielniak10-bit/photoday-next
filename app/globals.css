@@ -64,6 +64,11 @@
     --border: rgba(252, 250, 248, 0.15);
     --border-subtle: rgba(252, 250, 248, 0.08);
   }
+
+  html,
+  body {
+    background: #000000;
+  }
 }
 
 /* ── Reset ─────────────────────────────────────── */
@@ -79,7 +84,8 @@ html,
 body {
   height: 100%;
   font-family: var(--font-sans);
-  background: var(--bg-primary);
+  background: #e2e8f0;
+  /* Soft gray for desktop outer */
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

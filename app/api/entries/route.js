@@ -16,7 +16,7 @@ export async function GET(request) {
     const end = `${year}-${String(month).padStart(2, '0')}-31`;
 
     try {
-        const db = createAdminClient();
+        const db = supabaseAdmin;
         const { data, error } = await db
             .from('entries')
             .select('*')
@@ -41,7 +41,7 @@ export async function POST(request) {
         const { date, description = '', mood = '', privacy = 'private', photoPath } = await request.json();
         if (!date) return NextResponse.json({ error: 'date is required' }, { status: 400 });
 
-        const db = createAdminClient();
+        const db = supabaseAdmin;
         const now = Date.now();
 
         // Handle base64 photo upload to Supabase Storage

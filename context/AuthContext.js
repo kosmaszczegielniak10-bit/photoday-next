@@ -11,16 +11,22 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load user from token on mount
+    // Load user from token (or HTTP-only cookie) on mount
     useEffect(() => {
         const token = localStorage.getItem(TOKEN_KEY);
-        if (!token) { setLoading(false); return; }
         fetch('/api/auth/me', {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
         })
             .then(r => r.ok ? r.json() : null)
-            .then(u => { if (u) setUser(u); })
-            .catch(() => { })
+            .then(u => {
+                if (u) {
+                    setUser(u);
+                } else {
+                    localStorage.removeItem(TOKEN_KEY);
+                    setUser(null);
+                }
+            })
+            .catch(() => { localStorage.removeItem(TOKEN_KEY); })
             .finally(() => setLoading(false));
     }, []);
 

@@ -31,7 +31,7 @@ export async function GET(request, { params }) {
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { partnerId } = await params;
-    const db = createAdminClient();
+    const db = supabaseAdmin;
 
     const convId = await getOrCreateConversation(db, parseInt(userId), parseInt(partnerId));
 
@@ -59,7 +59,7 @@ export async function POST(request, { params }) {
     const { text } = await request.json();
     if (!text?.trim()) return NextResponse.json({ error: 'text is required' }, { status: 400 });
 
-    const db = createAdminClient();
+    const db = supabaseAdmin;
     const convId = await getOrCreateConversation(db, parseInt(userId), parseInt(partnerId));
 
     const { data: msg, error } = await db
