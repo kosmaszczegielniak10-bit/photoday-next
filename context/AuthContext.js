@@ -1,22 +1,14 @@
 'use client';
 // context/AuthContext.js — Global auth state
 
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    // Load user from HTTP-only cookie on mount via /api/auth/me
-    useEffect(() => {
-        fetch('/api/auth/me')
-            .then(r => r.ok ? r.json() : null)
-            .then(u => setUser(u || null))
-            .catch(() => setUser(null))
-            .finally(() => setLoading(false));
-    }, []);
+export function AuthProvider({ children, initialUser }) {
+    const [user, setUser] = useState(initialUser || null);
+    // Loading is effectively false because we fetch deterministically on the server.
+    const [loading, setLoading] = useState(false);
 
     const login = useCallback(async (email, password) => {
         const res = await fetch('/api/auth/login', {

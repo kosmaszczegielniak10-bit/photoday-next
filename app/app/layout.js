@@ -62,15 +62,7 @@ export default function AppLayout({ children }) {
         if (!loading && !user) router.replace('/auth');
     }, [user, loading, router]);
 
-    if (loading) {
-        return (
-            <div className={styles.splash}>
-                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
-                <div className={styles.splashName}>PhotoDay</div>
-            </div>
-        );
-    }
-    if (!user) return null;
+
 
     return (
         <div className={styles.shell}>

@@ -4,9 +4,9 @@
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/components/ui/Toast';
 
-export default function Providers({ children }) {
+export default function Providers({ children, initialUser }) {
     return (
-        <AuthProvider>
+        <AuthProvider initialUser={initialUser}>
             <ToastProvider>
                 {children}
             </ToastProvider>
