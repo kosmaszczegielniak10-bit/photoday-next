@@ -35,7 +35,7 @@ export async function POST(request) {
 
         if (error) throw error;
 
-        const token = signToken(user);
+        const token = signToken(user.id);
 
         const res = NextResponse.json({ user, token }, { status: 201 });
         res.cookies.set('photoday_token', token, {
