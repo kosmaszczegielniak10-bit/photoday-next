@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
@@ -40,7 +41,7 @@ export default function AuthClient() {
         <div className={styles.page}>
             {/* Hero gradient */}
             <div className={styles.hero}>
-                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.appIcon} style={{ width: 64, height: 64 }} />
+                <Image src="/logo.svg" alt="PhotoDay Logo" className={styles.appIcon} width={64} height={64} />
                 <h1 className={styles.appName}>PhotoDay</h1>
                 <p className={styles.tagline}>Twój prywatny dziennik fotograficzny</p>
             </div>

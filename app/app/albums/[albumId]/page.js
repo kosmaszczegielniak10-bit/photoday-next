@@ -2,6 +2,7 @@
 // app/app/albums/[albumId]/page.js — Single Album View (Masonry Grid)
 
 import { useState, useEffect, use } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
@@ -71,7 +72,7 @@ export default function SingleAlbumPage({ params }) {
                             gridRowEnd: i % 3 === 0 ? 'span 2' : 'span 1'
                         }}>
                             {photo.photo_path ? (
-                                <img src={getStorageUrl(photo.photo_path)} alt="" className={styles.photoImg} />
+                                <Image src={getStorageUrl(photo.photo_path)} alt="" fill className={styles.photoImg} style={{ objectFit: 'cover' }} />
                             ) : (
                                 <div className={styles.photoPlaceholder} />
                             )}

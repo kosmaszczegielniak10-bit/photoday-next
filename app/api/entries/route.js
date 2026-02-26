@@ -19,7 +19,7 @@ export async function GET(request) {
         const db = supabaseAdmin;
         const { data, error } = await db
             .from('entries')
-            .select('*')
+            .select('id, date, created_at, photo_path, description, mood, privacy')
             .eq('user_id', userId)
             .gte('date', start)
             .lte('date', end)

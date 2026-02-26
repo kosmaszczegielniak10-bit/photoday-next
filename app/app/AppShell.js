@@ -44,7 +44,7 @@ const NAV_ITEMS = [
     { href: '/app/calendar', label: 'Kalendarz', Icon: IcCalendar },
     { href: '/app/feed', label: 'Znajomi', Icon: IcFeed },
     { href: '/app/capture', label: '', Icon: IcCapture, capture: true },
-    { href: '/app/friends', label: 'Wiadomości', Icon: IcUsers },
+    { href: '/app/messages', label: 'Wiadomości', Icon: IcMessages },
     { href: '/app/profile', label: 'Profil', Icon: IcProfile },
 ];
 

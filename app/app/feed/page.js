@@ -2,6 +2,7 @@
 // app/app/feed/page.js — Friends Feed: Stories + Posts + Likes + Comments
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { api } from '@/lib/api';
@@ -42,7 +43,7 @@ function StoryItem({ story, onView, isMe }) {
     return (
         <div className={styles.storyItem} onClick={() => onView(story)}>
             <div className={`${styles.storyRing} ${isMe ? styles.storyRingMe : ''}`}>
-                <img src={av} alt={name} className={styles.storyAvatar} />
+                <Image src={av} alt={name} className={styles.storyAvatar} width={80} height={80} unoptimized={av.includes('ui-avatars')} />
             </div>
             <span className={styles.storyName}>{isMe ? 'Twoja' : name.split(' ')[0]}</span>
         </div>
@@ -87,7 +88,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
         <div className={styles.postCard}>
             {/* Header */}
             <div className={styles.postHeader}>
-                <img src={av} alt={post.author_name} className={`${styles.postAvatar} avatar`} />
+                <Image src={av} alt={post.author_name} className={`${styles.postAvatar} avatar`} width={44} height={44} unoptimized={av.includes('ui-avatars')} />
                 <div className={styles.postMeta}>
                     <div className={styles.postAuthor}>{post.author_name}</div>
                     <div className={styles.postTime}>{timeAgo(post.created_at)}</div>
@@ -101,7 +102,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
 
             {/* Photo */}
             {photoSrc && (
-                <img src={photoSrc} alt="" className={styles.postPhoto} loading="lazy" />
+                <Image src={photoSrc} alt="" className={styles.postPhoto} width={600} height={750} />
             )}
 
             {/* Caption */}
@@ -128,7 +129,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
                 <div className={styles.commentsSection}>
                     {(post.comments || []).map(c => (
                         <div key={c.id} className={styles.comment}>
-                            <img src={avatarUrl(c.author_avatar, c.author_name)} alt="" className={styles.commentAvatar} />
+                            <Image src={avatarUrl(c.author_avatar, c.author_name)} alt="" className={styles.commentAvatar} width={28} height={28} unoptimized={!c.author_avatar} />
                             <div className={styles.commentBody}>
                                 <span className={styles.commentAuthor}>{c.author_name}</span>
                                 <span className={styles.commentText}>{c.text}</span>
@@ -235,9 +236,9 @@ function StoryViewer({ story, onClose }) {
     const src = getStorageUrl(story.photo_path);
     return (
         <div className={styles.storyViewer} onClick={onClose}>
-            <img src={src} alt="" className={styles.storyViewerImg} />
+            <Image src={src} alt="" className={styles.storyViewerImg} width={1080} height={1920} style={{ objectFit: 'contain' }} />
             <div className={styles.storyViewerInfo}>
-                <img src={avatarUrl(story.avatar_path, story.display_name)} alt="" className={styles.storyViewerAvatar} />
+                <Image src={avatarUrl(story.avatar_path, story.display_name)} alt="" className={styles.storyViewerAvatar} width={36} height={36} unoptimized={!story.avatar_path} />
                 <span>{story.display_name || story.username}</span>
                 <span style={{ marginLeft: 'auto', fontSize: 12, opacity: .7 }}>{timeAgo(story.created_at)}</span>
             </div>

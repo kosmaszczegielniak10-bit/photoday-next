@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
 import { getStorageUrl } from '@/lib/storage';
@@ -78,7 +79,7 @@ export default function AlbumsPage() {
                                 <div className={`${styles.stackCard} ${styles.stackBack1}`} />
                                 <div className={`${styles.stackCard} ${styles.stackFront}`}>
                                     {album.cover_photo_path ? (
-                                        <img src={getStorageUrl(album.cover_photo_path)} alt="" className={styles.coverImg} />
+                                        <Image src={getStorageUrl(album.cover_photo_path)} alt="" className={styles.coverImg} width={300} height={400} />
                                     ) : (
                                         <div className={styles.placeholderCover}><IcFolder /></div>
                                     )}
