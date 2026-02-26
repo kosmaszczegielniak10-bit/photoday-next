@@ -51,7 +51,7 @@ const NAV_ITEMS = [
     { href: '/app/profile', label: 'Profil', Icon: IcProfile },
 ];
 
-import Providers from '@/app/providers';
+
 
 export default function AppLayout({ children }) {
     const { user, loading } = useAuth();
@@ -64,12 +64,10 @@ export default function AppLayout({ children }) {
 
     if (loading) {
         return (
-            <Providers>
-                <div className={styles.splash}>
-                    <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
-                    <div className={styles.splashName}>PhotoDay</div>
-                </div>
-            </Providers>
+            <div className={styles.splash}>
+                <img src="/logo.svg" alt="PhotoDay Logo" className={styles.splashIcon} style={{ width: 120, height: 120 }} />
+                <div className={styles.splashName}>PhotoDay</div>
+            </div>
         );
     }
     if (!user) return null;

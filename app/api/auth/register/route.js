@@ -26,7 +26,7 @@ export async function POST(request) {
 
         const password_hash = await hashPassword(password);
 
-        const { data: user, error } = await db.from('users').insert({
+        const { data: user, error } = await supabaseAdmin.from('users').insert({
             email: email.toLowerCase().trim(),
             username: username.toLowerCase().trim(),
             display_name: displayName.trim(),

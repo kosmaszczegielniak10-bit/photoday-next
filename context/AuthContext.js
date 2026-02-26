@@ -5,28 +5,16 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const AuthContext = createContext(null);
 
-const TOKEN_KEY = 'photoday_token';
-
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load user from token (or HTTP-only cookie) on mount
+    // Load user from HTTP-only cookie on mount via /api/auth/me
     useEffect(() => {
-        const token = localStorage.getItem(TOKEN_KEY);
-        fetch('/api/auth/me', {
-            headers: token ? { Authorization: `Bearer ${token}` } : {}
-        })
+        fetch('/api/auth/me')
             .then(r => r.ok ? r.json() : null)
-            .then(u => {
-                if (u) {
-                    setUser(u);
-                } else {
-                    localStorage.removeItem(TOKEN_KEY);
-                    setUser(null);
-                }
-            })
-            .catch(() => { localStorage.removeItem(TOKEN_KEY); })
+            .then(u => setUser(u || null))
+            .catch(() => setUser(null))
             .finally(() => setLoading(false));
     }, []);
 
@@ -38,7 +26,6 @@ export function AuthProvider({ children }) {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Błąd logowania');
-        localStorage.setItem(TOKEN_KEY, data.token);
         setUser(data.user);
         return data.user;
     }, []);
@@ -51,21 +38,18 @@ export function AuthProvider({ children }) {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Błąd rejestracji');
-        localStorage.setItem(TOKEN_KEY, data.token);
         setUser(data.user);
         return data.user;
     }, []);
 
     const logout = useCallback(async () => {
-        localStorage.removeItem(TOKEN_KEY);
         setUser(null);
         await fetch('/api/auth/logout', { method: 'POST' }).catch(() => { });
+        window.location.href = '/auth';
     }, []);
 
-    const getToken = useCallback(() => localStorage.getItem(TOKEN_KEY), []);
-
     return (
-        <AuthContext.Provider value={{ user, setUser, loading, login, register, logout, getToken }}>
+        <AuthContext.Provider value={{ user, setUser, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
@@ -75,9 +59,4 @@ export function useAuth() {
     const ctx = useContext(AuthContext);
     if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>');
     return ctx;
-}
-
-export function getToken() {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem(TOKEN_KEY);
 }
