@@ -3,13 +3,16 @@
 
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/components/ui/Toast';
+import { ThemeProvider } from 'next-themes';
 
 export default function Providers({ children, initialUser }) {
     return (
-        <AuthProvider initialUser={initialUser}>
-            <ToastProvider>
-                {children}
-            </ToastProvider>
-        </AuthProvider>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+            <AuthProvider initialUser={initialUser}>
+                <ToastProvider>
+                    {children}
+                </ToastProvider>
+            </AuthProvider>
+        </ThemeProvider>
     );
 }

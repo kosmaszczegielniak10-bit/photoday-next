@@ -27,7 +27,7 @@ export default async function RootLayout({ children }) {
   }
 
   return (
-    <html lang="pl">
+    <html lang="pl" suppressHydrationWarning>
       <body>
         <div id="app-container">
           <Providers initialUser={initialUser}>

@@ -5,24 +5,25 @@ import { requireAuth } from '@/lib/auth';
 import { supabaseAdmin } from '@/lib/supabase';
 
 async function getOrCreateConversation(db, userId, partnerId) {
-    const ua = Math.min(userId, partnerId);
-    const ub = Math.max(userId, partnerId);
+    // Sort UUIDs to enforce consistent user_a / user_b ordering without Math.min
+    const [ua, ub] = [userId, partnerId].sort();
 
     const { data: existing } = await db
         .from('conversations')
         .select('id')
         .eq('user_a', ua)
         .eq('user_b', ub)
-        .single();
+        .maybeSingle();
 
     if (existing) return existing.id;
 
-    const { data: created } = await db
+    const { data: created, error } = await db
         .from('conversations')
         .insert({ user_a: ua, user_b: ub, last_message_at: Date.now() })
         .select('id')
         .single();
 
+    if (error) throw new Error(error.message);
     return created.id;
 }
 
@@ -33,7 +34,7 @@ export async function GET(request, { params }) {
     const { partnerId } = await params;
     const db = supabaseAdmin;
 
-    const convId = await getOrCreateConversation(db, parseInt(userId), parseInt(partnerId));
+    const convId = await getOrCreateConversation(db, userId, partnerId);
 
     // Mark partner's messages as read
     await db.from('messages')
@@ -60,13 +61,13 @@ export async function POST(request, { params }) {
     if (!text?.trim()) return NextResponse.json({ error: 'text is required' }, { status: 400 });
 
     const db = supabaseAdmin;
-    const convId = await getOrCreateConversation(db, parseInt(userId), parseInt(partnerId));
+    const convId = await getOrCreateConversation(db, userId, partnerId);
 
     const { data: msg, error } = await db
         .from('messages')
         .insert({
             conversation_id: convId,
-            sender_id: parseInt(userId),
+            sender_id: userId,
             text: text.trim(),
             created_at: Date.now(),
         })

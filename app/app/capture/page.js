@@ -7,11 +7,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
 import styles from './capture.module.css';
 
-const MOODS = [
-    { id: 'happy', Icon: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="24" height="24"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg> },
-    { id: 'neutral', Icon: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="24" height="24"><circle cx="12" cy="12" r="10" /><line x1="8" y1="15" x2="16" y2="15" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg> },
-    { id: 'sad', Icon: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="24" height="24"><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg> }
-];
+const MOODS = ['😊', '😐', '😢', '😤', '🤩', '😴', '🤔', '💪'];
 
 export default function CapturePage() {
     const router = useRouter();
@@ -139,12 +135,12 @@ export default function CapturePage() {
                     <div className={styles.moods}>
                         {MOODS.map(m => (
                             <button
-                                key={m.id}
+                                key={m}
                                 type="button"
-                                className={`${styles.moodBtn} ${mood === m.id ? styles.moodActive : ''}`}
-                                onClick={() => setMood(prev => prev === m.id ? '' : m.id)}
+                                className={`${styles.moodBtn} ${mood === m ? styles.moodActive : ''}`}
+                                onClick={() => setMood(prev => prev === m ? '' : m)}
                             >
-                                <m.Icon />
+                                {m}
                             </button>
                         ))}
                     </div>
@@ -167,10 +163,26 @@ export default function CapturePage() {
                     </div>
                 </div>
 
-                <button className="btn btn-primary btn-full" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Zapisywanie…' : 'Zapisz wpis'}
+                <button className={`btn btn-primary btn-full ${saving ? 'opacity-50' : ''}`} onClick={handleSave} disabled={saving}>
+                    {saving ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <svg className="spinner" viewBox="0 0 50 50" style={{ width: 20, height: 20, animation: 'spin 1s linear infinite' }}><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" strokeWidth="5" strokeDasharray="31.4 31.4" strokeLinecap="round" /></svg>
+                            Zapisywanie wpisu...
+                        </div>
+                    ) : 'Zapisz wpis'}
                 </button>
             </div>
+
+            {/* Global Spinner overlay block to prevent tapping out */}
+            {saving && (
+                <div style={{ position: 'absolute', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="sleek-card" style={{ padding: '24px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                        <svg className="spinner" viewBox="0 0 50 50" style={{ width: 40, height: 40, animation: 'spin 1s linear infinite' }}><circle cx="25" cy="25" r="20" fill="none" stroke="var(--accent-orange)" strokeWidth="5" strokeDasharray="31.4 31.4" strokeLinecap="round" /></svg>
+                        <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Przesyłanie zdjęcia...</span>
+                    </div>
+                </div>
+            )}
+            <style jsx>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
         </div>
     );
 }

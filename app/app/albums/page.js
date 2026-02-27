@@ -64,7 +64,19 @@ export default function AlbumsPage() {
 
             <div className={styles.grid}>
                 {albums === null ? (
-                    <div className={styles.emptyWrap}>Ładowanie...</div>
+                    Array.from({ length: 6 }).map((_, i) => (
+                        <div key={`skel-${i}`} className={styles.albumCard} style={{ cursor: 'default' }}>
+                            <div className={styles.stackPreview}>
+                                <div className={`${styles.stackCard} ${styles.stackBack2}`} style={{ border: 'none' }} />
+                                <div className={`${styles.stackCard} ${styles.stackBack1}`} style={{ border: 'none' }} />
+                                <div className={`${styles.stackCard} ${styles.stackFront} skeleton`} style={{ border: 'none' }} />
+                            </div>
+                            <div className={styles.albumInfo}>
+                                <div className="skeleton" style={{ height: 16, width: '70%', borderRadius: 4, marginBottom: 6 }} />
+                                <div className="skeleton" style={{ height: 12, width: '40%', borderRadius: 4 }} />
+                            </div>
+                        </div>
+                    ))
                 ) : albums.length === 0 ? (
                     <div className={styles.emptyWrap}>
                         <div className={styles.emptyIcon}><IcFolder /></div>

@@ -10,11 +10,11 @@
 
   /* Brand colors (Railway) */
   --accent-orange: #ff5722;
-  --accent-pink: #ff5722;
+  --accent-pink: #d45113;
   --accent-teal: #1c1938;
-  --accent-purple: #1c1938;
+  --accent-purple: #20a39e;
   --accent-red: #ff5722;
-  --accent-green: #1c1938;
+  --accent-green: #20a39e;
   --accent-yellow: #ffffc7;
   --accent-indigo: #1c1938;
 
@@ -38,11 +38,11 @@
   --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
 
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
+  --radius-sm: 16px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 40px;
   --radius-full: 9999px;
 
   /* Navigation */
@@ -50,22 +50,20 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #0f1f3a;
-    --bg-secondary: #1d3461;
-    --bg-tertiary: #264073;
-    --bg-card: rgba(29, 52, 97, 0.6);
-    --bg-elevated: rgba(29, 52, 97, 0.8);
-    --bg-glass: rgba(223, 239, 202, 0.05);
+[data-theme='dark'] {
+  --bg-primary: #0f1f3a;
+  --bg-secondary: #1d3461;
+  --bg-tertiary: #264073;
+  --bg-card: rgba(29, 52, 97, 0.6);
+  --bg-elevated: rgba(29, 52, 97, 0.8);
+  --bg-glass: rgba(223, 239, 202, 0.05);
 
-    --text-primary: #ffffc7;
-    --text-secondary: #dfefca;
-    --text-tertiary: rgba(223, 239, 202, 0.55);
+  --text-primary: #ffffc7;
+  --text-secondary: #dfefca;
+  --text-tertiary: rgba(223, 239, 202, 0.55);
 
-    --border: rgba(223, 239, 202, 0.15);
-    --border-subtle: rgba(223, 239, 202, 0.08);
-  }
+  --border: rgba(223, 239, 202, 0.15);
+  --border-subtle: rgba(223, 239, 202, 0.08);
 }
 
 /* ── Reset ─────────────────────────────────────── */
@@ -221,6 +219,47 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ── Sleek Modern UI ────────────────────────────── */
+.sleek-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  /* Deeper, softer shadow */
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+  backdrop-filter: blur(12px);
+  /* Glassmorphism effect */
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme='dark'] .sleek-card {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: rgba(29, 52, 97, 0.4);
+  /* More transparent for blur */
+}
+
+/* Floating overlay layout for Reference Images */
+.hero-image-overlay {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.floating-action-bar {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-full);
+  padding: 8px 16px;
+  display: flex;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
 }
 
 /* ── Bottom Sheet & Backdrop ────────────────────── */
