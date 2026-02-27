@@ -94,7 +94,7 @@
 .cell {
     position: relative;
     aspect-ratio: 1;
-    border-radius: var(--radius-lg);
+    border-radius: 8px;
     border: none;
     background: var(--bg-secondary);
     cursor: pointer;

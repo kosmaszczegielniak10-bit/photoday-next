@@ -93,15 +93,21 @@ export default function MessagesPage() {
         }
     }, [inputText, sending, user?.id, partner, showToast]);
 
+    const [pickingFriend, setPickingFriend] = useState(false);
+    const [friendsList, setFriendsList] = useState([]);
+
     const openNewChat = async () => {
         try {
             const friends = await api.get('/friends');
-            if (!friends.length) { showToast('Brak znajomych', 'info'); return; }
-            // Show a quick friend picker (simple prompt for now)
-            // TODO: Replace with a proper modal component
-            const f = friends[0];
-            openChat(f.id, f.display_name || f.username, f.avatar_path);
-        } catch { showToast('Błąd', 'error'); }
+            if (!friends.length) { showToast('Brak znajomych. Dodaj kogoś w zakładce Znajomi!', 'info'); return; }
+            setFriendsList(friends);
+            setPickingFriend(true);
+        } catch { showToast('Błąd ładowania znajomych', 'error'); }
+    };
+
+    const handleSelectFriend = (f) => {
+        setPickingFriend(false);
+        openChat(f.id, f.name || f.username, f.avatar);
     };
 
     if (view === 'chat' && partner) {
@@ -218,6 +224,34 @@ export default function MessagesPage() {
                         );
                     })}
                 </div>
+            )}
+
+            {pickingFriend && (
+                <>
+                    <div className="backdrop fade-in" onClick={() => setPickingFriend(false)} />
+                    <div className="bottom-sheet slide-up" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 20px)' }}>
+                        <div className="sheet-handle" onClick={() => setPickingFriend(false)} />
+                        <div className="sheet-header">
+                            <div className="sheet-title">Nowa wiadomość</div>
+                        </div>
+                        <div style={{ padding: '10px 0', maxHeight: '50vh', overflowY: 'auto' }}>
+                            {friendsList.map(f => {
+                                const av = f.avatar
+                                    ? getStorageUrl(f.avatar)
+                                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(f.name)}&size=52&background=random&color=fff`;
+                                return (
+                                    <div key={f.id} onClick={() => handleSelectFriend(f)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px', cursor: 'pointer', transition: 'background 0.2s' }}>
+                                        <Image src={av} alt="" width={44} height={44} className="avatar" unoptimized={av.includes('ui-avatars')} />
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ fontWeight: 600, fontSize: 15, color: 'var(--text-primary)' }}>{f.name}</div>
+                                            <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>@{f.username}</div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );

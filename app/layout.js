@@ -9,6 +9,13 @@ export const metadata = {
   description: 'Twój prywatny dziennik fotograficzny',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default async function RootLayout({ children }) {
   // 1. Server-side session hydration
   const cookieStore = await cookies();

@@ -7,6 +7,9 @@ import { supabaseAdmin } from '@/lib/supabase';
 async function getOrCreateConversation(db, userId, partnerId) {
     const num1 = Number(userId);
     const num2 = Number(partnerId);
+
+    if (isNaN(num1) || isNaN(num2)) throw new Error('Invalid user ID provided');
+
     const ua = Math.min(num1, num2);
     const ub = Math.max(num1, num2);
 
@@ -76,7 +79,10 @@ export async function POST(request, { params }) {
         .select()
         .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+        console.error('MESSAGES INSERT ERROR:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 
     // Update last_message_at on conversation
     await db.from('conversations').update({ last_message_at: Date.now() }).eq('id', convId);

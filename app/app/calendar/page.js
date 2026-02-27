@@ -25,6 +25,7 @@ export default function CalendarPage() {
     const [selected, setSelected] = useState(null); // dateStr selected
     const [entry, setEntry] = useState(null); // entry for selected date
     const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState({ streak: 0, total: 0 });
 
     const showToast = useToast();
     const router = useRouter();
@@ -44,6 +45,7 @@ export default function CalendarPage() {
     }, [showToast]);
 
     useEffect(() => { loadMonth(year, month); }, [year, month, loadMonth]);
+    useEffect(() => { api.get('/profile/stats').then(setStats).catch(() => { }); }, []);
 
     const prevMonth = () => {
         if (month === 0) { setYear(y => y - 1); setMonth(11); }
@@ -78,7 +80,11 @@ export default function CalendarPage() {
             {/* Month navigation as Header */}
             <div className={styles.monthNav}>
                 <h2 className={styles.monthTitle}>{MONTHS_PL[month]} {year}</h2>
-                <div style={{ display: 'flex', gap: 12 }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bg-glass)', padding: '6px 12px', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-full)', fontWeight: 700, fontSize: 13, color: 'var(--accent-orange)' }}>
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M11.64 1.48a1 1 0 011.69 0l1.24 1.83a8 8 0 003.56 3.55l1.63 1.25a1 1 0 01.44 1.1A8.96 8.96 0 0112 21a8.96 8.96 0 01-8.2-11.77 1 1 0 01.44-1.1l1.63-1.25a8 8 0 003.56-3.55l1.21-1.85z" /></svg>
+                        {stats?.streak || 0} Dni
+                    </div>
                     <button className={styles.navArrow} onClick={prevMonth} aria-label="Poprzedni miesiąc">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="20" height="20"><polyline points="15 18 9 12 15 6" /></svg>
                     </button>
