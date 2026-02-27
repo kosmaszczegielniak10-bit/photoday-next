@@ -7,7 +7,8 @@ export async function GET(request, { params }) {
     const userId = await requireAuth(request);
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { albumId } = params;
+    const p = await params;
+    const albumId = p.albumId;
 
     try {
         const db = supabaseAdmin;

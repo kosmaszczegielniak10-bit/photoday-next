@@ -102,7 +102,12 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
 
             {/* Photo */}
             {photoSrc && (
-                <Image src={photoSrc} alt="" className={styles.postPhoto} width={600} height={750} />
+                <div
+                    onClick={() => onPhotoClick && onPhotoClick(post)}
+                    style={{ cursor: 'pointer', display: 'block' }}
+                >
+                    <Image src={photoSrc} alt="" className={styles.postPhoto} width={600} height={750} />
+                </div>
             )}
 
             {/* Caption */}
@@ -231,6 +236,141 @@ function NewPostModal({ onClose, onPost }) {
     );
 }
 
+// ── Elite Photo Modal (Swipe-to-Dismiss & Social Data) ──
+function ElitePhotoModal({ post, onClose, currentUserId, onLike, onComment }) {
+    const [dragY, setDragY] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [comment, setComment] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const startY = useRef(0);
+    const currentY = useRef(0);
+
+    const handleTouchStart = (e) => {
+        startY.current = e.touches[0].clientY;
+        currentY.current = startY.current;
+        setIsDragging(true);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!isDragging) return;
+        currentY.current = e.touches[0].clientY;
+        const diff = currentY.current - startY.current;
+        if (diff > 0) setDragY(diff); // Only allow dragging downwards
+    };
+
+    const handleTouchEnd = () => {
+        setIsDragging(false);
+        if (dragY > 120) {
+            onClose(); // Dismiss if dragged down far enough
+        } else {
+            setDragY(0); // Snap back
+        }
+    };
+
+    const handleComment = async () => {
+        if (!comment.trim() || submitting) return;
+        setSubmitting(true);
+        const text = comment.trim();
+        setComment('');
+        try { await onComment(post.id, text); }
+        finally { setSubmitting(false); }
+    };
+
+    const photoSrc = post.photo_path?.startsWith('http')
+        ? post.photo_path
+        : post.photo_path ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/uploads/${post.photo_path}` : null;
+
+    if (!photoSrc) return null;
+
+    // Calculate dynamic opacity and scale based on drag distance
+    const progress = Math.min(dragY / window.innerHeight, 1);
+    const opacity = 1 - (progress * 1.5);
+    const scale = 1 - (progress * 0.1);
+
+    return (
+        <div className="elite-modal-wrapper" style={{ opacity: Math.max(0, opacity) }}>
+            <div className="backdrop" onClick={onClose} style={{ pointerEvents: isDragging ? 'none' : 'auto' }} />
+
+            <div
+                className={`elite-modal-content ${styles.photoModalContainer}`}
+                style={{
+                    transform: `translateY(${dragY}px) scale(${scale})`,
+                    transition: isDragging ? 'none' : 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s'
+                }}
+            >
+                {/* Drag Handle Area */}
+                <div
+                    className={styles.photoModalDragArea}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onClick={onClose}
+                >
+                    <Image src={photoSrc} alt="" className={styles.photoModalImg} width={1080} height={1920} style={{ objectFit: 'contain' }} priority="true" />
+                    <div className={styles.photoModalCloseBadge} onClick={onClose}>
+                        <IcX />
+                    </div>
+                </div>
+
+                {/* Social Data Panel underneath the photo */}
+                <div className={styles.photoModalSocialPanel}>
+                    {/* Author Meta */}
+                    <div className={styles.pmAuthorRow}>
+                        <Image src={avatarUrl(post.author_avatar, post.author_name)} alt={post.author_name} className="avatar" width={36} height={36} unoptimized={!post.author_avatar} />
+                        <div>
+                            <div style={{ fontWeight: 600, fontSize: 14 }}>{post.author_name}</div>
+                            <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{timeAgo(post.created_at)}</div>
+                        </div>
+                    </div>
+
+                    {post.caption && <p className={styles.pmCaption}>{post.caption}</p>}
+                    {post.description && !post.caption && <p className={styles.pmCaption}>{post.description}</p>}
+
+                    {/* Actions */}
+                    <div className={styles.pmActions}>
+                        <button className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`} onClick={() => onLike(post.id, post.liked)}>
+                            <IcHeart filled={post.liked} />
+                            <span>{post.like_count || 0}</span>
+                        </button>
+                        <div className={styles.actionBtn} style={{ cursor: 'default' }}>
+                            <IcComment />
+                            <span>{post.comment_count || 0}</span>
+                        </div>
+                    </div>
+
+                    {/* Comments Scroll Area */}
+                    <div className={styles.pmCommentsArea}>
+                        {(post.comments || []).map(c => (
+                            <div key={c.id} className={styles.comment}>
+                                <Image src={avatarUrl(c.author_avatar, c.author_name)} alt="" className={styles.commentAvatar} width={28} height={28} unoptimized={!c.author_avatar} />
+                                <div className={styles.commentBody}>
+                                    <span className={styles.commentAuthor}>{c.author_name}</span>
+                                    <span className={styles.commentText}>{c.text}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Comment Input */}
+                    <div className={styles.commentInput} style={{ marginTop: 'auto', paddingTop: 12 }}>
+                        <input
+                            className="input"
+                            style={{ borderRadius: 22, padding: '8px 14px', fontSize: 14 }}
+                            placeholder="Zostaw ślad…"
+                            value={comment}
+                            onChange={e => setComment(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && handleComment()}
+                        />
+                        <button className={styles.sendComment} onClick={handleComment} disabled={!comment.trim() || submitting}>
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ── Story Viewer ──────────────────────────────────
 function StoryViewer({ stories, initialIndex, onClose }) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -292,6 +432,7 @@ export default function FeedPage() {
     const [stories, setStories] = useState(null);
     const [posts, setPosts] = useState(null);
     const [activeStoryIndex, setActiveStoryIndex] = useState(null);
+    const [activePost, setActivePost] = useState(null); // Elite Modal Trigger
     const [showNewPost, setShowNewPost] = useState(false);
     const fileRef = useRef(null);
 
@@ -449,6 +590,7 @@ export default function FeedPage() {
                                 onLike={handleLike}
                                 onComment={handleComment}
                                 onDelete={handleDelete}
+                                onPhotoClick={setActivePost}
                             />
                         ))
                 }
@@ -461,6 +603,15 @@ export default function FeedPage() {
 
             {showNewPost && <NewPostModal onClose={() => setShowNewPost(false)} onPost={handlePost} />}
             {activeStoryIndex !== null && <StoryViewer stories={stories} initialIndex={activeStoryIndex} onClose={() => setActiveStoryIndex(null)} />}
+            {activePost && (
+                <ElitePhotoModal
+                    post={activePost}
+                    currentUserId={user?.id}
+                    onLike={handleLike}
+                    onComment={handleComment}
+                    onClose={() => setActivePost(null)}
+                />
+            )}
         </div>
     );
 }

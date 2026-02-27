@@ -24,11 +24,10 @@ export default function SingleAlbumPage({ params }) {
         // Fetch mock details or real data
         api.get(`/albums/${albumId}`).then(a => {
             setAlbum(a);
-            setEntries(a.photos || []); // fallback array
+            setEntries(a.photos || []);
         }).catch(err => {
-            showToast('Album w budowie. Zastępczy widok', 'info');
-            setAlbum({ name: 'Wspomnienia', count: 12 });
-            setEntries([1, 2, 3, 4, 5, 6].map(i => ({ id: i, placeholder: true })));
+            showToast('Błąd ładowania albumu', 'error');
+            setEntries([]);
         });
     }, [albumId, showToast]);
 

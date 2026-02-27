@@ -123,14 +123,36 @@ body {
   }
 }
 
-.skeleton {
-  background: linear-gradient(90deg,
-      var(--bg-secondary) 25%,
-      var(--border) 50%,
-      var(--bg-secondary) 75%);
-  background-size: 800px 100%;
-  animation: shimmer 1.5s infinite linear;
-  border-radius: var(--radius-sm);
+/* ── Global Utilities & Elite UX Polish ──────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Modal swipe-to-dismiss animations & container */
+.elite-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  /* Above backdrop */
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  /* Let backdrop handle clicks */
+}
+
+.elite-modal-content {
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s;
 }
 
 /* ── Animations ─────────────────────────────────── */

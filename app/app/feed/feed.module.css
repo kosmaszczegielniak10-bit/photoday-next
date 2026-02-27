@@ -595,3 +595,85 @@
         transform: translateY(0)
     }
 }
+
+/* ── Elite Photo Modal ──────────────────────────── */
+.photoModalContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.photoModalDragArea {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.photoModalImg {
+    width: 100%;
+    height: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+.photoModalCloseBadge {
+    position: absolute;
+    top: calc(env(safe-area-inset-top, 20px) + 20px);
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+}
+
+.photoModalSocialPanel {
+    background: var(--bg-primary);
+    border-radius: 24px 24px 0 0;
+    padding: 24px 20px calc(env(safe-area-inset-bottom, 20px) + 20px);
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+}
+
+.pmAuthorRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.pmCaption {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.pmActions {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.pmCommentsArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
