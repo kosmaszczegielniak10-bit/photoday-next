@@ -90,8 +90,8 @@ export default function AlbumsPage() {
                                 <div className={`${styles.stackCard} ${styles.stackBack2}`} />
                                 <div className={`${styles.stackCard} ${styles.stackBack1}`} />
                                 <div className={`${styles.stackCard} ${styles.stackFront}`}>
-                                    {album.cover_photo_path ? (
-                                        <Image src={getStorageUrl(album.cover_photo_path)} alt="" className={styles.coverImg} width={300} height={400} />
+                                    {album.cover_path ? (
+                                        <Image src={getStorageUrl(album.cover_path)} alt="" className={styles.coverImg} width={300} height={400} />
                                     ) : (
                                         <div className={styles.placeholderCover}><IcFolder /></div>
                                     )}

@@ -40,6 +40,7 @@ export async function GET(request) {
         users(username, display_name, avatar_path)
       `)
             .in('user_id', visibleUsers)
+            .is('deleted_at', null)
             .order('created_at', { ascending: false })
             .limit(30);
 
@@ -86,26 +87,39 @@ export async function GET(request) {
         // 3. Attach reaction counts and "liked by me" status
         // Fetch all reactions for these entries (reactions table links to entries, not posts in legacy DB. We map it anyway)
         const entryDbIds = rawFeed.filter(f => f.type === 'entry').map(f => f.db_id);
+        const postDbIds = rawFeed.filter(f => f.type === 'post').map(f => f.db_id);
+
+        let reactions = [];
+        let postLikes = [];
 
         if (entryDbIds.length > 0) {
-            const { data: reactions } = await supabaseAdmin
+            const { data } = await supabaseAdmin
                 .from('reactions')
                 .select('entry_id, user_id')
                 .in('entry_id', entryDbIds);
-
-            rawFeed.forEach(item => {
-                if (item.type === 'entry') {
-                    const itemReactions = (reactions || []).filter(r => r.entry_id === item.db_id);
-                    item.like_count = itemReactions.length;
-                    item.liked = itemReactions.some(r => r.user_id === user);
-                } else {
-                    // New posts format (mock likes for now if no dedicated posts reactions table, or just use 0)
-                    item.like_count = 0;
-                    item.liked = false;
-                }
-                item.comment_count = item.comments?.length || 0;
-            });
+            if (data) reactions = data;
         }
+
+        if (postDbIds.length > 0) {
+            const { data } = await supabaseAdmin
+                .from('post_likes')
+                .select('post_id, user_id')
+                .in('post_id', postDbIds);
+            if (data) postLikes = data;
+        }
+
+        rawFeed.forEach(item => {
+            if (item.type === 'entry') {
+                const itemReactions = reactions.filter(r => r.entry_id === item.db_id);
+                item.like_count = itemReactions.length;
+                item.liked = itemReactions.some(r => r.user_id === user);
+            } else {
+                const itemLikes = postLikes.filter(p => p.post_id === item.db_id);
+                item.like_count = itemLikes.length;
+                item.liked = itemLikes.some(p => p.user_id === user);
+            }
+            item.comment_count = item.comments?.length || 0;
+        });
 
         return NextResponse.json(rawFeed);
     } catch (error) {

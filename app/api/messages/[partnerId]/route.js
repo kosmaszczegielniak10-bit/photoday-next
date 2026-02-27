@@ -5,8 +5,10 @@ import { requireAuth } from '@/lib/auth';
 import { supabaseAdmin } from '@/lib/supabase';
 
 async function getOrCreateConversation(db, userId, partnerId) {
-    // Sort UUIDs to enforce consistent user_a / user_b ordering without Math.min
-    const [ua, ub] = [userId, partnerId].sort();
+    const num1 = Number(userId);
+    const num2 = Number(partnerId);
+    const ua = Math.min(num1, num2);
+    const ub = Math.max(num1, num2);
 
     const { data: existing } = await db
         .from('conversations')

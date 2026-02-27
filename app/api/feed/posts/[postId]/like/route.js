@@ -12,14 +12,15 @@ export async function POST(request, { params }) {
 
     try {
         if (type === 'entry') {
-            const { error } = await supabaseAdmin
+            const { error: entryErr } = await supabaseAdmin
                 .from('reactions')
                 .insert([{ entry_id: id, user_id: user }]);
-            // Ignore unique constraint errors
-            if (error && error.code !== '23505') throw error;
+            if (entryErr && entryErr.code !== '23505') throw entryErr;
         } else {
-            // For new posts, if we had a post_reactions table we'd add it here.
-            // Currently just returning success to keep UI happy.
+            const { error: postErr } = await supabaseAdmin
+                .from('post_likes')
+                .insert([{ post_id: id, user_id: user }]);
+            if (postErr && postErr.code !== '23505') throw postErr;
         }
         return NextResponse.json({ ok: true });
     } catch (error) {
@@ -37,11 +38,17 @@ export async function DELETE(request, { params }) {
 
     try {
         if (type === 'entry') {
-            const { error } = await supabaseAdmin
+            const { error: entryErr } = await supabaseAdmin
                 .from('reactions')
                 .delete()
                 .match({ entry_id: id, user_id: user });
-            if (error) throw error;
+            if (entryErr) throw entryErr;
+        } else {
+            const { error: postErr } = await supabaseAdmin
+                .from('post_likes')
+                .delete()
+                .match({ post_id: id, user_id: user });
+            if (postErr) throw postErr;
         }
         return NextResponse.json({ ok: true });
     } catch (error) {

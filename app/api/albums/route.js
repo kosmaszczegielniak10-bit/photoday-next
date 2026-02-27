@@ -10,7 +10,7 @@ export async function GET(request) {
         const { data, error } = await supabaseAdmin
             .from('albums')
             .select(`
-                id, name, created_at, cover_photo_path,
+                id, name, created_at, cover_path,
                 album_entries ( count )
             `)
             .eq('user_id', userId)

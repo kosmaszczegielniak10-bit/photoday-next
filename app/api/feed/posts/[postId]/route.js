@@ -20,7 +20,7 @@ export async function DELETE(request, { params }) {
         } else if (type === 'entry') {
             const { error } = await supabaseAdmin
                 .from('entries')
-                .delete()
+                .update({ deleted_at: Date.now() })
                 .match({ id, user_id: user });
             if (error) throw error;
         }
