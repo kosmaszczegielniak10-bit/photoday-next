@@ -128,13 +128,23 @@ export default function MessagesPage() {
                             <span>Zacznij rozmowę!</span>
                         </div>
                     )}
-                    {messages.map(m => {
+                    {messages.map((m, i) => {
                         const isMine = m.sender_id === user?.id;
+                        const prev = messages[i - 1];
+                        const next = messages[i + 1];
+                        const isFirstInGrp = !prev || prev.sender_id !== m.sender_id;
+                        const isLastInGrp = !next || next.sender_id !== m.sender_id;
+
                         const t = m.created_at ? new Date(m.created_at).toLocaleTimeString('pl', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                        const br = isMine
+                            ? `18px ${isFirstInGrp ? '18px' : '4px'} ${isLastInGrp ? '18px' : '4px'} 18px`
+                            : `${isFirstInGrp ? '18px' : '4px'} 18px 18px ${isLastInGrp ? '18px' : '4px'}`;
+
                         return (
-                            <div key={m.id} className={`${styles.bubble} ${isMine ? styles.bubbleMine : styles.bubbleTheirs}`}>
-                                <div className={styles.bubbleText}>{m.text}</div>
-                                <div className={styles.bubbleTime}>{t}</div>
+                            <div key={m.id} className={`${styles.bubble} ${isMine ? styles.bubbleMine : styles.bubbleTheirs}`} style={{ marginTop: isFirstInGrp && i > 0 ? 12 : 2 }}>
+                                <div className={styles.bubbleText} style={{ borderRadius: br }}>{m.text}</div>
+                                {isLastInGrp && <div className={styles.bubbleTime}>{t}</div>}
                             </div>
                         );
                     })}

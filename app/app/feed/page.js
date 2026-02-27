@@ -232,11 +232,49 @@ function NewPostModal({ onClose, onPost }) {
 }
 
 // ── Story Viewer ──────────────────────────────────
-function StoryViewer({ story, onClose }) {
+function StoryViewer({ stories, initialIndex, onClose }) {
+    const [currentIndex, setCurrentIndex] = useState(initialIndex);
+    const story = stories[currentIndex];
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (currentIndex < stories.length - 1) setCurrentIndex(currentIndex + 1);
+            else onClose();
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [currentIndex, stories.length, onClose]);
+
+    const handleTap = (e) => {
+        const x = e.clientX;
+        const width = window.innerWidth;
+        if (x < width * 0.3) {
+            if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+            else onClose();
+        } else {
+            if (currentIndex < stories.length - 1) setCurrentIndex(currentIndex + 1);
+            else onClose();
+        }
+    };
+
+    if (!story) {
+        onClose();
+        return null;
+    }
+
     const src = getStorageUrl(story.photo_path);
     return (
-        <div className={styles.storyViewer} onClick={onClose}>
-            <Image src={src} alt="" className={styles.storyViewerImg} width={1080} height={1920} style={{ objectFit: 'contain' }} />
+        <div className={styles.storyViewer} onClick={handleTap}>
+            <div className={styles.storyProgressContainer}>
+                {stories.map((s, i) => {
+                    const statusClass = i < currentIndex ? styles.progressCompleted : i === currentIndex ? styles.progressActive : '';
+                    return (
+                        <div key={s.id || i} className={styles.storyProgressBar}>
+                            <div className={`${styles.storyProgressProgress} ${statusClass}`} key={currentIndex} />
+                        </div>
+                    );
+                })}
+            </div>
+            <Image src={src} key={story.id} alt="" className={styles.storyViewerImg} width={1080} height={1920} style={{ objectFit: 'contain' }} priority="true" />
             <div className={styles.storyViewerInfo}>
                 <Image src={avatarUrl(story.avatar_path, story.display_name)} alt="" className={styles.storyViewerAvatar} width={36} height={36} unoptimized={!story.avatar_path} />
                 <span>{story.display_name || story.username}</span>
@@ -253,7 +291,7 @@ export default function FeedPage() {
     const showToast = useToast();
     const [stories, setStories] = useState(null);
     const [posts, setPosts] = useState(null);
-    const [activeStory, setActiveStory] = useState(null);
+    const [activeStoryIndex, setActiveStoryIndex] = useState(null);
     const [showNewPost, setShowNewPost] = useState(false);
     const fileRef = useRef(null);
 
@@ -350,12 +388,12 @@ export default function FeedPage() {
                                 <div className="skeleton" style={{ width: 40, height: 9, borderRadius: 4, marginTop: 5 }} />
                             </div>
                         ))
-                        : stories.map(s => (
+                        : stories.map((s, i) => (
                             <StoryItem
                                 key={s.id}
                                 story={s}
                                 isMe={s.user_id === user?.id}
-                                onView={setActiveStory}
+                                onView={() => setActiveStoryIndex(i)}
                             />
                         ))
                     }
@@ -404,7 +442,7 @@ export default function FeedPage() {
             </button>
 
             {showNewPost && <NewPostModal onClose={() => setShowNewPost(false)} onPost={handlePost} />}
-            {activeStory && <StoryViewer story={activeStory} onClose={() => setActiveStory(null)} />}
+            {activeStoryIndex !== null && <StoryViewer stories={stories} initialIndex={activeStoryIndex} onClose={() => setActiveStoryIndex(null)} />}
         </div>
     );
 }

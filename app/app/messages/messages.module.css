@@ -174,7 +174,6 @@
     padding: 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
 }
 
 .emptyChat {
@@ -217,13 +216,11 @@
 .bubbleMine .bubbleText {
     background: var(--accent-orange);
     color: white;
-    border-radius: 18px 18px 4px 18px;
 }
 
 .bubbleTheirs .bubbleText {
     background: var(--bg-card);
     color: var(--text-primary);
-    border-radius: 18px 18px 18px 4px;
 }
 
 .bubbleTime {
@@ -244,6 +241,14 @@
 .msgInput {
     border-radius: 22px;
     padding: 10px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid transparent;
+    transition: border-color .2s;
+}
+
+.msgInput:focus {
+    border-color: var(--border);
+    outline: none;
 }
 
 .sendBtn {

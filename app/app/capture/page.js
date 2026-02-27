@@ -7,7 +7,7 @@ import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
 import styles from './capture.module.css';
 
-const MOODS = ['😊', '😐', '😢', '😤', '🤩', '😴', '🤔', '💪'];
+const MOODS = ['✨', '📸', '🚀', '🔥'];
 
 export default function CapturePage() {
     const router = useRouter();
