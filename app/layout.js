@@ -29,9 +29,11 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="pl">
       <body>
-        <Providers initialUser={initialUser}>
-          {children}
-        </Providers>
+        <div id="app-container">
+          <Providers initialUser={initialUser}>
+            {children}
+          </Providers>
+        </div>
       </body>
     </html>
   );

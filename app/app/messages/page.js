@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { supabase } from '@/lib/supabase';
 import { getStorageUrl } from '@/lib/storage';
+import Image from 'next/image';
 import styles from './messages.module.css';
 
 export default function MessagesPage() {
@@ -111,7 +112,9 @@ export default function MessagesPage() {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="22" height="22"><polyline points="15 18 9 12 15 6" /></svg>
                     </button>
                     {partner.avatar && (
-                        <img src={getStorageUrl(partner.avatar)} alt="" className={styles.chatAvatar} />
+                        <div className={styles.chatAvatarWrapper}>
+                            <Image src={getStorageUrl(partner.avatar)} alt="" fill className={styles.chatAvatar} unoptimized={partner.avatar.includes('ui-avatars')} />
+                        </div>
                     )}
                     <span className={styles.chatName}>{partner.name}</span>
                 </div>
@@ -193,7 +196,9 @@ export default function MessagesPage() {
                             : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.display_name || c.username)}&size=52&background=random&color=fff`;
                         return (
                             <div key={c.partner_id} className={styles.convRow} onClick={() => openChat(c.partner_id, c.display_name || c.username, c.avatar_path)}>
-                                <img src={av} alt="" className={styles.convAvatar} />
+                                <div className={styles.convAvatarWrapper}>
+                                    <Image src={av} alt="" fill className={styles.convAvatar} unoptimized={av.includes('ui-avatars')} />
+                                </div>
                                 <div className={styles.convInfo}>
                                     <div className={styles.convName}>{c.display_name || c.username}</div>
                                     <div className={styles.convPreview}>{c.last_text || 'Zacznij rozmowę'}</div>

@@ -3,6 +3,9 @@
     flex-direction: column;
     height: 100%;
     background: var(--bg-primary);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    z-index: 1000;
+    position: relative;
 }
 
 .header {
@@ -135,7 +138,8 @@
 }
 
 .privacyActive {
-    border-color: var(--accent-teal);
-    color: var(--accent-teal);
+    border-color: var(--accent-indigo);
+    background: var(--accent-indigo);
+    color: white;
     font-weight: 700;
 }

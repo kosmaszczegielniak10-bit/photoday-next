@@ -3,22 +3,8 @@
     flex-direction: column;
     height: 100dvh;
     overflow: hidden;
-    background: var(--bg-primary);
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
     position: relative;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-    border-left: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
-}
-
-@media (max-width: 900px) {
-    .shell {
-        border-left: none;
-        border-right: none;
-        box-shadow: none;
-    }
 }
 
 .main {

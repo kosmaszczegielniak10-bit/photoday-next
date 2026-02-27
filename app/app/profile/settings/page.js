@@ -11,23 +11,8 @@ export default function SettingsPage() {
     const router = useRouter();
     const showToast = useToast();
 
-    const [displayName, setDisplayName] = useState(user?.display_name || '');
-    const [bio, setBio] = useState(user?.bio || '');
-    const [saving, setSaving] = useState(false);
-
-    const saveSettings = async () => {
-        setSaving(true);
-        try {
-            const updated = await api.patch('/auth/me', { displayName, bio });
-            setUser(updated);
-            showToast('Ustawienia zapisane!', 'success');
-            setTimeout(() => router.back(), 500);
-        } catch (err) {
-            showToast(err.message, 'error');
-        } finally {
-            setSaving(false);
-        }
-    };
+    const [theme, setTheme] = useState('light');
+    const [notifications, setNotifications] = useState(true);
 
     const handleLogout = async () => {
         await logout();
@@ -40,34 +25,43 @@ export default function SettingsPage() {
                 <button className={styles.btnIcon} onClick={() => router.back()} style={{ marginRight: 'auto', background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', padding: 8 }}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="24" height="24"><polyline points="15 18 9 12 15 6" /></svg>
                 </button>
-                <h1 className={styles.pageTitle} style={{ marginRight: 'auto' }}>Ustawienia</h1>
+                <h1 className={styles.pageTitle} style={{ marginRight: 'auto' }}>Ustawienia Aplikacji</h1>
             </div>
 
-            <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: 20 }}>
-                <div className={styles.formGroup} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>Imię / pseudonim</label>
-                    <input
-                        className="input"
-                        value={displayName}
-                        onChange={e => setDisplayName(e.target.value)}
-                        placeholder="Imię / pseudonim"
-                    />
+            <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {/* Theme Toggle */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ flexShrink: 0, width: 40, height: 40, background: 'var(--accent-orange)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>
+                        </div>
+                        <div>
+                            <div style={{ fontWeight: 600, fontSize: 15, color: 'var(--text-primary)' }}>Motyw Ciemny</div>
+                            <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>Przełącz wygląd aplikacji</div>
+                        </div>
+                    </div>
+                    {/* Dummy switch */}
+                    <div onClick={() => { setTheme(t => t === 'light' ? 'dark' : 'light'); showToast('Zmiana motywu wkrótce', 'info'); }} style={{ width: 50, height: 28, background: theme === 'dark' ? 'var(--accent-orange)' : 'var(--border)', borderRadius: 14, position: 'relative', cursor: 'pointer', transition: 'background 0.2s' }}>
+                        <div style={{ width: 24, height: 24, background: '#fff', borderRadius: '50%', position: 'absolute', top: 2, left: theme === 'dark' ? 24 : 2, transition: 'left 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
+                    </div>
                 </div>
 
-                <div className={styles.formGroup} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <label style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-secondary)' }}>Bio</label>
-                    <textarea
-                        className="input"
-                        value={bio}
-                        onChange={e => setBio(e.target.value)}
-                        placeholder="O mnie..."
-                        rows={4}
-                    />
+                {/* Notifications Toggle */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: 'var(--bg-secondary)', borderRadius: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ flexShrink: 0, width: 40, height: 40, background: 'var(--accent-indigo)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
+                        </div>
+                        <div>
+                            <div style={{ fontWeight: 600, fontSize: 15, color: 'var(--text-primary)' }}>Powiadomienia Push</div>
+                            <div style={{ fontSize: 13, color: 'var(--text-tertiary)' }}>Nowe wpisy znajomych</div>
+                        </div>
+                    </div>
+                    {/* Dummy switch */}
+                    <div onClick={() => setNotifications(n => !n)} style={{ width: 50, height: 28, background: notifications ? 'var(--accent-orange)' : 'var(--border)', borderRadius: 14, position: 'relative', cursor: 'pointer', transition: 'background 0.2s' }}>
+                        <div style={{ width: 24, height: 24, background: '#fff', borderRadius: '50%', position: 'absolute', top: 2, left: notifications ? 24 : 2, transition: 'left 0.2s', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
+                    </div>
                 </div>
-
-                <button className="btn btn-primary" onClick={saveSettings} disabled={saving} style={{ marginTop: 10 }}>
-                    {saving ? 'Zapisywanie…' : 'Zapisz zmiany'}
-                </button>
             </div>
 
             <div className={styles.menuSection} style={{ marginTop: 40, padding: '0 20px' }}>
