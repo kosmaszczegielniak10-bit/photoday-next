@@ -27,8 +27,8 @@ export default function SettingsPage() {
         setReminderTime(localStorage.getItem('reminderTime') || '19:00');
         setPin(localStorage.getItem('appPin'));
 
-        // Fetch dummy/real entry count
-        api.get('/entries/stats').then(res => setEntryCount(res?.count || 0)).catch(() => setEntryCount('12')); // fallback mapping
+        // Fetch correct real entry count
+        api.get('/profile/stats').then(res => setEntryCount(res.total || 0)).catch(() => setEntryCount('0'));
     }, []);
     const handleLogout = async () => {
         await logout();

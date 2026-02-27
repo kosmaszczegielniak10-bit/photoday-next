@@ -186,3 +186,85 @@
     color: var(--text-tertiary);
     text-align: center;
 }
+
+/* Album Detail Missing Styles */
+.filtersScroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 0 20px 20px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.filtersScroll::-webkit-scrollbar {
+    display: none;
+}
+
+.filterPill {
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.filterActive {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.photoCard {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.photoCard:active {
+    transform: scale(0.95);
+}
+
+.photoImg {
+    border-radius: 12px;
+}
+
+.photoPlaceholder {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-secondary);
+}
+
+.floatingActionBar {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom, 20px) + 80px);
+    /* Above bottom nav */
+    right: 20px;
+    z-index: 50;
+}
+
+.actionFab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.actionFab:active {
+    transform: scale(0.9);
+}

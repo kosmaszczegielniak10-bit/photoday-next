@@ -3,6 +3,7 @@
 // NOTE: Full photo-diary calendar — porting logic from js/views/calendar.js
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
@@ -141,35 +142,60 @@ export default function CalendarPage() {
                 })}
             </div>
 
-            {/* Selected day detail */}
+            {/* Selected day detail (Bottom Sheet Modal) */}
             {selected && (
-                <div className={styles.dayDetail}>
-                    <div className={styles.dayDetailHeader}>
-                        <span className={styles.dayDetailDate}>{selected}</span>
-                        <button
-                            className={`btn btn-primary`}
-                            style={{ padding: '8px 16px', fontSize: 13 }}
-                            onClick={() => router.push(`/app/capture?date=${selected}`)}
-                        >
-                            {entry ? 'Edytuj' : '+ Dodaj'}
-                        </button>
-                    </div>
-                    {entry ? (
-                        <div className={styles.entryPreview}>
-                            {entry.photo_path && (
-                                <img
-                                    src={getStorageUrl(entry.photo_path)}
-                                    alt=""
-                                    className={styles.entryPhoto}
-                                />
-                            )}
-                            {entry.description && <p className={styles.entryDesc}>{entry.description}</p>}
-                            {entry.mood && <span className={styles.moodTag}>{entry.mood}</span>}
+                <>
+                    <div className="backdrop fade-in" onClick={() => setSelected(null)} />
+                    <div className="bottom-sheet slide-up" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 20px)' }}>
+                        <div className="sheet-handle" onClick={() => setSelected(null)} />
+
+                        <div className="sheet-header" style={{ padding: '0 20px 14px', borderBottom: '1px solid var(--border-subtle)', marginBottom: 16 }}>
+                            <div className="sheet-title" style={{ fontSize: 18 }}>{selected}</div>
                         </div>
-                    ) : (
-                        <p className={styles.noEntry}>Brak wpisu na ten dzień. Dodaj swoje pierwsze zdjęcie!</p>
-                    )}
-                </div>
+
+                        {entry ? (
+                            <div className={styles.entryPreview} style={{ padding: '0 20px' }}>
+                                {entry.photo_path && (
+                                    <div style={{ position: 'relative', width: '100%', height: 320, borderRadius: 16, overflow: 'hidden', marginBottom: 16, boxShadow: '0 8px 24px rgba(0,0,0,0.1)' }}>
+                                        <Image
+                                            src={getStorageUrl(entry.photo_path)}
+                                            alt=""
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                            unoptimized
+                                        />
+                                    </div>
+                                )}
+                                {entry.description && <p className={styles.entryDesc} style={{ fontSize: 15, lineHeight: 1.6, color: 'var(--text-primary)' }}>{entry.description}</p>}
+                                {entry.mood && <span className={styles.moodTag} style={{ fontSize: 14, padding: '6px 14px', background: 'var(--bg-secondary)', marginTop: 12 }}>{entry.mood}</span>}
+
+                                <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+                                    <button className="btn btn-secondary" style={{ flex: 1, background: 'var(--bg-secondary)', color: 'var(--text-primary)' }} onClick={() => router.push(`/app/capture?date=${selected}`)}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                        Edytuj
+                                    </button>
+                                    <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => {
+                                        const link = document.createElement('a');
+                                        link.href = getStorageUrl(entry.photo_path);
+                                        link.download = `photoday-${selected}.jpg`;
+                                        link.target = '_blank';
+                                        link.click();
+                                    }}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        Zapisz
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{ padding: '20px 20px 40px', textAlign: 'center' }}>
+                                <p className={styles.noEntry} style={{ fontSize: 15, marginBottom: 20 }}>Brak wpisu na ten dzień. Dodaj swoje pierwsze zdjęcie!</p>
+                                <button className="btn btn-primary btn-full transition-all" onClick={() => router.push(`/app/capture?date=${selected}`)}>
+                                    + Dodaj wpis
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );

@@ -99,18 +99,30 @@
 .moods {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    -webkit-overflow-scrolling: touch;
+}
+
+.moods::-webkit-scrollbar {
+    display: none;
 }
 
 .moodBtn {
-    font-size: 24px;
+    flex-shrink: 0;
+    font-size: 26px;
     background: var(--bg-secondary);
     border: 2px solid transparent;
     border-radius: 12px;
-    padding: 6px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: all .15s;
     line-height: 1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
 .moodActive {
