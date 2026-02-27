@@ -6,7 +6,8 @@ export async function POST(request, { params }) {
     const user = await requireAuth(request);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const rawId = params.postId; // e.g. "p12" or "e45"
+    const p = await params;
+    const rawId = p.postId; // e.g. "p12" or "e45"
     const type = rawId.charAt(0) === 'e' ? 'entry' : 'post';
     const id = parseInt(rawId.slice(1), 10);
 
@@ -32,7 +33,8 @@ export async function DELETE(request, { params }) {
     const user = await requireAuth(request);
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const rawId = params.postId;
+    const p = await params;
+    const rawId = p.postId;
     const type = rawId.charAt(0) === 'e' ? 'entry' : 'post';
     const id = parseInt(rawId.slice(1), 10);
 

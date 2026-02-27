@@ -77,24 +77,32 @@
 
 html,
 body {
+  width: 100%;
   height: 100%;
+  max-width: 100vw;
   font-family: var(--font-sans);
-  background: #000;
-  /* Darkened desktop background */
+  background: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  /* Prevent rubber-banding on iOS for a native feel */
+  overscroll-behavior-y: none;
 }
 
-#app-container {
-  max-width: 480px;
+#app-container,
+.main-layout {
+  width: 100%;
   min-height: 100vh;
-  margin: 0 auto;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-primary);
   position: relative;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   overflow-x: hidden;
+  /* Safe env checks for physical notches/bezels */
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
 }
 
 /* ── Scrollbar ──────────────────────────────────── */

@@ -76,8 +76,8 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    padding: 0 16px;
+    gap: 2px;
+    padding: 0 4px;
 }
 
 .dayHeader {
@@ -94,7 +94,7 @@
 .cell {
     position: relative;
     aspect-ratio: 1;
-    border-radius: 16px;
+    border-radius: 8px;
     border: none;
     background: var(--bg-secondary);
     cursor: pointer;

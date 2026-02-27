@@ -86,7 +86,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
 
     return (
         <div className={styles.postCard}>
-            {/* Header */}
+            {/* Header Overlay */}
             <div className={styles.postHeader}>
                 <Image src={av} alt={post.author_name} className={`${styles.postAvatar} avatar`} width={44} height={44} unoptimized={av.includes('ui-avatars')} />
                 <div className={styles.postMeta}>
@@ -100,7 +100,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
                 )}
             </div>
 
-            {/* Photo */}
+            {/* Edge-to-Edge Photo */}
             {photoSrc && (
                 <div
                     onClick={() => onPhotoClick && onPhotoClick(post)}
@@ -110,23 +110,26 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
                 </div>
             )}
 
-            {/* Caption */}
-            {post.caption && <p className={styles.postCaption}>{post.caption}</p>}
-            {post.description && !post.caption && <p className={styles.postCaption}>{post.description}</p>}
-
-            {/* Actions */}
+            {/* Bottom Overlay Actions & Caption */}
             <div className={styles.postActions}>
-                <button
-                    className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`}
-                    onClick={() => onLike(post.id, post.liked)}
-                >
-                    <IcHeart filled={post.liked} />
-                    <span>{post.like_count || 0}</span>
-                </button>
-                <button className={styles.actionBtn} onClick={() => { setExpanded(e => !e); if (!expanded) setTimeout(() => inputRef.current?.focus(), 150); }}>
-                    <IcComment />
-                    <span>{post.comment_count || 0}</span>
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                        <button
+                            className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`}
+                            onClick={() => onLike(post.id, post.liked)}
+                        >
+                            <IcHeart filled={post.liked} />
+                            <span>{post.like_count || 0}</span>
+                        </button>
+                        <button className={styles.actionBtn} onClick={() => { setExpanded(e => !e); if (!expanded) setTimeout(() => inputRef.current?.focus(), 150); }}>
+                            <IcComment />
+                            <span>{post.comment_count || 0}</span>
+                        </button>
+                    </div>
+                    {/* Caption embedded above actions for BeReal effect */}
+                    {post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)', fontWeight: 500 }}>{post.caption}</p>}
+                    {post.description && !post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)', fontWeight: 500 }}>{post.description}</p>}
+                </div>
             </div>
 
             {/* Comments section */}

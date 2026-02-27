@@ -7,7 +7,8 @@ export async function POST(request, { params }) {
     const userId = await requireAuth(request);
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const albumId = params.albumId;
+    const p = await params;
+    const albumId = p.albumId;
 
     try {
         const { entryId } = await request.json();
@@ -57,6 +58,52 @@ export async function POST(request, { params }) {
 
     } catch (err) {
         console.error('Add photo to album err:', err);
+        return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+}
+
+export async function DELETE(request, { params }) {
+    const userId = await requireAuth(request);
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const p = await params;
+    const albumId = p.albumId;
+
+    try {
+        const { searchParams } = new URL(request.url);
+        const entryId = searchParams.get('entryId');
+
+        if (!entryId) {
+            return NextResponse.json({ error: 'Brak ID zdjęcia' }, { status: 400 });
+        }
+
+        const db = supabaseAdmin;
+
+        // Verify the album belongs to the user
+        const { data: album, error: albumErr } = await db
+            .from('albums')
+            .select('id')
+            .eq('id', albumId)
+            .eq('user_id', userId)
+            .single();
+
+        if (albumErr || !album) {
+            return NextResponse.json({ error: 'Nie znaleziono albumu lub brak dostępu' }, { status: 404 });
+        }
+
+        // Delete from junction table
+        const { error: deleteErr } = await db
+            .from('album_entries')
+            .delete()
+            .eq('album_id', albumId)
+            .eq('entry_id', entryId);
+
+        if (deleteErr) throw deleteErr;
+
+        return NextResponse.json({ success: true });
+
+    } catch (err) {
+        console.error('Remove photo from album err:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }

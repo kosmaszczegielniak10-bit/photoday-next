@@ -22,9 +22,12 @@ async function getOrCreateConversation(db, userId, partnerId) {
 
     if (existing) return existing.id;
 
+    // Must be integer unix epoch
+    const now = Math.floor(Date.now());
+
     const { data: created, error } = await db
         .from('conversations')
-        .insert({ user_a: ua, user_b: ub, last_message_at: Date.now() })
+        .insert({ user_a: ua, user_b: ub, last_message_at: now })
         .select('id')
         .single();
 
@@ -67,6 +70,7 @@ export async function POST(request, { params }) {
 
     const db = supabaseAdmin;
     const convId = await getOrCreateConversation(db, userId, partnerId);
+    const now = Math.floor(Date.now());
 
     const { data: msg, error } = await db
         .from('messages')
@@ -74,7 +78,7 @@ export async function POST(request, { params }) {
             conversation_id: convId,
             sender_id: userId,
             text: text.trim(),
-            created_at: Date.now(),
+            created_at: now,
         })
         .select()
         .single();
@@ -85,7 +89,7 @@ export async function POST(request, { params }) {
     }
 
     // Update last_message_at on conversation
-    await db.from('conversations').update({ last_message_at: Date.now() }).eq('id', convId);
+    await db.from('conversations').update({ last_message_at: now }).eq('id', convId);
 
     return NextResponse.json(msg, { status: 201 });
 }

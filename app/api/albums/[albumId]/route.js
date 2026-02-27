@@ -57,3 +57,39 @@ export async function GET(request, { params }) {
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
+
+export async function PATCH(request, { params }) {
+    const userId = await requireAuth(request);
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const p = await params;
+    const albumId = p.albumId;
+
+    try {
+        const body = await request.json();
+        const db = supabaseAdmin;
+
+        const updateData = {};
+        if (body.title !== undefined) updateData.title = body.title.trim();
+        if (body.cover_photo_path !== undefined) updateData.cover_photo_path = body.cover_photo_path;
+
+        if (Object.keys(updateData).length === 0) {
+            return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
+        }
+
+        const { data: album, error } = await db
+            .from('albums')
+            .update(updateData)
+            .eq('id', albumId)
+            .eq('user_id', userId)
+            .select('*')
+            .single();
+
+        if (error) throw error;
+        return NextResponse.json(album);
+
+    } catch (err) {
+        console.error('Update album err:', err);
+        return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+}
