@@ -68,6 +68,7 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
     const [expanded, setExpanded] = useState(false);
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
     const inputRef = useRef(null);
 
     const av = avatarUrl(post.author_avatar, post.author_name);
@@ -104,15 +105,32 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
             {photoSrc && (
                 <div
                     onClick={() => onPhotoClick && onPhotoClick(post)}
-                    style={{ cursor: 'pointer', display: 'block' }}
+                    style={{ cursor: 'pointer', display: 'block', position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
                 >
-                    <Image src={photoSrc} alt="" className={styles.postPhoto} width={600} height={750} />
+                    <Image
+                        src={photoSrc}
+                        alt=""
+                        className={styles.postPhoto}
+                        width={600} height={750}
+                        onLoad={() => setImgLoaded(true)}
+                        style={{
+                            opacity: imgLoaded ? 1 : 0,
+                            transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',
+                            transform: imgLoaded ? 'scale(1)' : 'scale(1.03)',
+                            objectFit: 'cover'
+                        }}
+                    />
                 </div>
             )}
 
             {/* Bottom Overlay Actions & Caption */}
             <div className={styles.postActions}>
                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    {post.likers && post.likers.length > 0 && (
+                        <div className={styles.likersText}>
+                            Polubione przez {post.likers[0].name} {post.likers.length > 1 ? `i ${post.likers.length - 1} innych` : ''}
+                        </div>
+                    )}
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                         <button
                             className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`}
@@ -245,6 +263,7 @@ function ElitePhotoModal({ post, onClose, currentUserId, onLike, onComment }) {
     const [isDragging, setIsDragging] = useState(false);
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
     const startY = useRef(0);
     const currentY = useRef(0);
 
@@ -309,7 +328,19 @@ function ElitePhotoModal({ post, onClose, currentUserId, onLike, onComment }) {
                     onTouchEnd={handleTouchEnd}
                     onClick={onClose}
                 >
-                    <Image src={photoSrc} alt="" className={styles.photoModalImg} width={1080} height={1920} style={{ objectFit: 'contain' }} priority="true" />
+                    <Image
+                        src={photoSrc}
+                        alt=""
+                        className={styles.photoModalImg}
+                        width={1080} height={1920}
+                        priority={true}
+                        onLoad={() => setImgLoaded(true)}
+                        style={{
+                            objectFit: 'contain',
+                            opacity: imgLoaded ? 1 : 0,
+                            transition: 'opacity 0.3s ease-out'
+                        }}
+                    />
                     <div className={styles.photoModalCloseBadge} onClick={onClose}>
                         <IcX />
                     </div>
@@ -330,6 +361,11 @@ function ElitePhotoModal({ post, onClose, currentUserId, onLike, onComment }) {
                     {post.description && !post.caption && <p className={styles.pmCaption}>{post.description}</p>}
 
                     {/* Actions */}
+                    {post.likers && post.likers.length > 0 && (
+                        <div className={styles.likersTextModal}>
+                            Polubione przez <span style={{ fontWeight: 600 }}>{post.likers[0].name}</span> {post.likers.length > 1 ? `i ${post.likers.length - 1} innych` : ''}
+                        </div>
+                    )}
                     <div className={styles.pmActions}>
                         <button className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`} onClick={() => onLike(post.id, post.liked)}>
                             <IcHeart filled={post.liked} />

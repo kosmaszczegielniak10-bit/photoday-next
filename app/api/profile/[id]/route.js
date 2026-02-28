@@ -63,7 +63,7 @@ export async function GET(request, context) {
 
         return NextResponse.json({
             user,
-            friendship: { status: friendshipStatus, reqId, friendshipId },
+            friendship: { status: friendshipStatus, reqId: friendshipId, friendshipId },
             posts: posts || []
         });
 

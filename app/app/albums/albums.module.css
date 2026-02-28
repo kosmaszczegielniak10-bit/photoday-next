@@ -268,3 +268,67 @@
 .actionFab:active {
     transform: scale(0.9);
 }
+
+/* ── Add Photos Modal ───────────────────────────── */
+.addModal {
+    height: 90vh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.addModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.addGrid {
+    flex: 1;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: min-content;
+    gap: 2px;
+    padding: 2px;
+}
+
+.addGridItem {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--bg-secondary);
+    cursor: pointer;
+}
+
+.addGridSelected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border: 3px solid var(--accent-orange);
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.addGridCheck {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--accent-orange);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addGridCheck svg {
+    width: 14px;
+    height: 14px;
+}

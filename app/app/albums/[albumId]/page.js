@@ -15,6 +15,116 @@ const IcMore = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 const IcEdit = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>;
 const IcImage = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>;
 const IcTrash = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>;
+const IcPlus = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="20" height="20"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
+
+function FadeImage({ src, alt, ...props }) {
+    const [loaded, setLoaded] = useState(false);
+    return (
+        <Image
+            src={src}
+            alt={alt || ""}
+            onLoad={() => setLoaded(true)}
+            style={{
+                opacity: loaded ? 1 : 0,
+                transition: 'opacity 0.3s ease',
+                ...props.style
+            }}
+            {...props}
+        />
+    );
+}
+
+// ── Add Photos Modal ─────────────────────────────
+function AddPhotosModal({ albumId, onClose, onAdded }) {
+    const [myPhotos, setMyPhotos] = useState(null);
+    const [selectedIds, setSelectedIds] = useState(new Set());
+    const [saving, setSaving] = useState(false);
+    const showToast = useToast();
+
+    useEffect(() => {
+        // Fetch user's own photos/posts to add to the album
+        api.get('/profile/me/posts')
+            .then(data => setMyPhotos(data?.posts || []))
+            .catch(() => {
+                showToast('Nie udało się pobrać twoich zdjęć', 'error');
+                setMyPhotos([]);
+            });
+    }, [showToast]);
+
+    const toggleSelection = (photoId) => {
+        const next = new Set(selectedIds);
+        if (next.has(photoId)) next.delete(photoId);
+        else next.add(photoId);
+        setSelectedIds(next);
+    };
+
+    const handleSave = async () => {
+        if (selectedIds.size === 0 || saving) return;
+        setSaving(true);
+        try {
+            // In a better API we'd send an array. For now we use Promise.all to add one by one concurrently
+            const saves = Array.from(selectedIds).map(pid => {
+                const photo = myPhotos.find(p => p.id === pid);
+                if (!photo) return Promise.resolve();
+                return api.post(`/albums/${albumId}/photos`, { photo_path: photo.photo_path });
+            });
+            await Promise.all(saves);
+            showToast(`Dodano ${selectedIds.size} zdjęć`, 'success');
+            onAdded();
+        } catch (err) {
+            showToast('Wystąpił błąd przy dodawaniu', 'error');
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    return (
+        <div className="elite-modal-wrapper" style={{ zIndex: 2000 }}>
+            <div className="backdrop" onClick={onClose} />
+            <div className={`bottom-sheet slide-up ${styles.addModal}`}>
+                <div className="sheet-handle" />
+                <div className={styles.addModalHeader}>
+                    <button className="btn btn-ghost" onClick={onClose}>Anuluj</button>
+                    <h3 style={{ margin: 0, fontSize: 17 }}>Dodaj zdjęcia</h3>
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleSave}
+                        disabled={selectedIds.size === 0 || saving}
+                        style={{ padding: '8px 16px', fontSize: 14 }}
+                    >
+                        {saving ? 'Zapis…' : `Dodaj (${selectedIds.size})`}
+                    </button>
+                </div>
+
+                <div className={styles.addGrid}>
+                    {myPhotos === null ? (
+                        Array.from({ length: 9 }).map((_, i) => <div key={i} className="skeleton" style={{ aspectRatio: '1', borderRadius: 8 }} />)
+                    ) : myPhotos.length === 0 ? (
+                        <div className={styles.emptyWrap} style={{ gridColumn: '1 / -1' }}>Nie masz jeszcze żadnych zdjęć.</div>
+                    ) : (
+                        myPhotos.map(photo => {
+                            const isSelected = selectedIds.has(photo.id);
+                            return (
+                                <div
+                                    key={photo.id}
+                                    className={styles.addGridItem}
+                                    onClick={() => toggleSelection(photo.id)}
+                                >
+                                    <FadeImage src={getStorageUrl(photo.photo_path)} fill style={{ objectFit: 'cover' }} />
+                                    {isSelected && (
+                                        <div className={styles.addGridSelected}>
+                                            <div className={styles.addGridCheck}><IcCheck /></div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function SingleAlbumPage({ params }) {
     const { albumId } = use(params);
@@ -23,12 +133,12 @@ export default function SingleAlbumPage({ params }) {
     const [album, setAlbum] = useState(null);
     const [entries, setEntries] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editTitle, setEditTitle] = useState('');
     const [selectionMode, setSelectionMode] = useState(null); // 'cover' | 'remove' | null
 
-    useEffect(() => {
-        // Fetch mock details or real data
+    const loadAlbum = useCallback(() => {
         api.get(`/albums/${albumId}`).then(a => {
             setAlbum(a);
             setEditTitle(a.name || a.title || '');
@@ -38,6 +148,10 @@ export default function SingleAlbumPage({ params }) {
             setEntries([]);
         });
     }, [albumId, showToast]);
+
+    useEffect(() => {
+        loadAlbum();
+    }, [loadAlbum]);
 
     const handleSaveTitle = async () => {
         if (!editTitle.trim()) return;
@@ -140,9 +254,9 @@ export default function SingleAlbumPage({ params }) {
                             opacity: selectionMode && photo.photo_path === album?.cover_photo_path ? 0.5 : 1
                         }}>
                             {photo.photo_path ? (
-                                <Image src={getStorageUrl(photo.photo_path)} alt="" fill className={styles.photoImg} style={{ objectFit: 'cover' }} />
+                                <FadeImage src={getStorageUrl(photo.photo_path)} fill className={styles.photoImg} style={{ objectFit: 'cover' }} />
                             ) : (
-                                <div className={styles.photoPlaceholder} />
+                                <div className={`${styles.photoPlaceholder} skeleton`} />
                             )}
                             {selectionMode === 'cover' && photo.photo_path === album?.cover_photo_path && (
                                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.5)', zIndex: 10 }}>
@@ -176,6 +290,14 @@ export default function SingleAlbumPage({ params }) {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                             <button
                                 className="action-row"
+                                onClick={() => { setShowOptions(false); setShowAddModal(true); }}
+                            >
+                                <div className="action-icon" style={{ color: 'var(--accent-teal)' }}><IcPlus /></div>
+                                <span style={{ flex: 1, textAlign: 'left', fontWeight: 600, color: 'var(--accent-teal)' }}>Dodaj zdjęcia</span>
+                            </button>
+
+                            <button
+                                className="action-row"
                                 onClick={() => { setShowOptions(false); setIsEditingTitle(true); }}
                             >
                                 <div className="action-icon"><IcEdit /></div>
@@ -206,6 +328,17 @@ export default function SingleAlbumPage({ params }) {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {showAddModal && (
+                <AddPhotosModal
+                    albumId={albumId}
+                    onClose={() => setShowAddModal(false)}
+                    onAdded={() => {
+                        setShowAddModal(false);
+                        loadAlbum();
+                    }}
+                />
             )}
         </div>
     );

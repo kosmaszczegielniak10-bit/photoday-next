@@ -11,10 +11,11 @@ export async function POST(request, { params }) {
     const albumId = p.albumId;
 
     try {
-        const { entryId } = await request.json();
+        const body = await request.json();
+        const photoPath = body.photo_path; // We are sending photo_path now. 
 
-        if (!entryId) {
-            return NextResponse.json({ error: 'Brak ID zdjęcia' }, { status: 400 });
+        if (!photoPath) {
+            return NextResponse.json({ error: 'Brak ścieżki zdjęcia' }, { status: 400 });
         }
 
         const db = supabaseAdmin;
@@ -31,6 +32,23 @@ export async function POST(request, { params }) {
             return NextResponse.json({ error: 'Nie znaleziono albumu lub brak dostępu' }, { status: 404 });
         }
 
+        // To keep things simple and unified with the current schema, we ensure the photo is an 'entry'
+        // If it's a 'post', we create a dummy entry OR if the schema allows text paths, we just insert.
+        // Wait, the schema for `album_entries` requires `entry_id`.
+        // Let's create an `entry` on the fly for this photo_path if it doesn't exist, to link it.
+        const { data: existingEntry } = await db.from('entries').select('id').eq('photo_path', photoPath).single();
+        let entryId = existingEntry?.id;
+
+        if (!entryId) {
+             const { data: newEntry, error: newEntryErr } = await db.from('entries').insert({
+                 user_id: userId,
+                 photo_path: photoPath,
+                 status: 'published'
+             }).select('id').single();
+             if (newEntryErr) throw newEntryErr;
+             entryId = newEntry.id;
+        }
+
         // Insert into junction table
         const { error: insertErr } = await db
             .from('album_entries')
@@ -39,22 +57,17 @@ export async function POST(request, { params }) {
                 entry_id: entryId
             });
 
-        // The database handles unique constraints, so if it fails with unique violation, it's just already in the album which is fine
         if (insertErr && insertErr.code !== '23505') {
             throw insertErr;
         }
 
         // Update the cover photo of the album to this new photo so it looks populated if it didn't have one
-        // (Just an optimization)
-        const { data: entry } = await db.from('entries').select('photo_path').eq('id', entryId).single();
-        if (entry?.photo_path) {
-            await db.from('albums')
-                .update({ cover_photo_path: entry.photo_path })
-                .eq('id', albumId)
-                .is('cover_photo_path', null);
-        }
+        await db.from('albums')
+            .update({ cover_photo_path: photoPath })
+            .eq('id', albumId)
+            .is('cover_photo_path', null);
 
-        return NextResponse.json({ success: true });
+        return NextResponse.json({ success: true, entryId });
 
     } catch (err) {
         console.error('Add photo to album err:', err);

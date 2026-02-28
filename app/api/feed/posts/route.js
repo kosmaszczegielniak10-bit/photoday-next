@@ -95,7 +95,7 @@ export async function GET(request) {
         if (entryDbIds.length > 0) {
             const { data } = await supabaseAdmin
                 .from('reactions')
-                .select('entry_id, user_id')
+                .select('entry_id, user_id, users(display_name, avatar_path)')
                 .in('entry_id', entryDbIds);
             if (data) reactions = data;
         }
@@ -103,7 +103,7 @@ export async function GET(request) {
         if (postDbIds.length > 0) {
             const { data } = await supabaseAdmin
                 .from('post_likes')
-                .select('post_id, user_id')
+                .select('post_id, user_id, users(display_name, avatar_path)')
                 .in('post_id', postDbIds);
             if (data) postLikes = data;
         }
@@ -113,10 +113,20 @@ export async function GET(request) {
                 const itemReactions = reactions.filter(r => r.entry_id === item.db_id);
                 item.like_count = itemReactions.length;
                 item.liked = itemReactions.some(r => r.user_id === user);
+                item.likers = itemReactions.map(r => ({
+                    id: r.user_id,
+                    name: r.users?.display_name || 'Użytkownik',
+                    avatar: r.users?.avatar_path
+                }));
             } else {
                 const itemLikes = postLikes.filter(p => p.post_id === item.db_id);
                 item.like_count = itemLikes.length;
                 item.liked = itemLikes.some(p => p.user_id === user);
+                item.likers = itemLikes.map(r => ({
+                    id: r.user_id,
+                    name: r.users?.display_name || 'Użytkownik',
+                    avatar: r.users?.avatar_path
+                }));
             }
             item.comment_count = item.comments?.length || 0;
         });

@@ -10,7 +10,7 @@
 .main {
     flex: 1;
     overflow-y: auto;
-    overflow-x: hidden;
+    padding-bottom: 80px;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -40,11 +40,11 @@
 
 /* ── Bottom Nav (Native Standard) ── */
 .nav {
-    position: absolute;
+    position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
+    width: 100%;
+    max-width: 480px;
+    z-index: 50;
 }
 
 .navInner {
