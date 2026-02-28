@@ -76,6 +76,7 @@
 .form {
     flex: 1;
     padding: 16px;
+    padding-bottom: 120px;
     display: flex;
     flex-direction: column;
     gap: 16px;

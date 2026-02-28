@@ -101,52 +101,54 @@ function PostCard({ post, currentUserId, onLike, onComment, onDelete }) {
                 )}
             </div>
 
-            {/* Edge-to-Edge Photo */}
-            {photoSrc && (
-                <div
-                    onClick={() => onPhotoClick && onPhotoClick(post)}
-                    style={{ cursor: 'pointer', display: 'block', position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
-                >
-                    <Image
-                        src={photoSrc}
-                        alt=""
-                        className={styles.postPhoto}
-                        width={600} height={750}
-                        onLoad={() => setImgLoaded(true)}
-                        style={{
-                            opacity: imgLoaded ? 1 : 0,
-                            transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',
-                            transform: imgLoaded ? 'scale(1)' : 'scale(1.03)',
-                            objectFit: 'cover'
-                        }}
-                    />
-                </div>
-            )}
-
-            {/* Bottom Overlay Actions & Caption */}
-            <div className={styles.postActions}>
-                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                    {post.likers && post.likers.length > 0 && (
-                        <div className={styles.likersText}>
-                            Polubione przez {post.likers[0].name} {post.likers.length > 1 ? `i ${post.likers.length - 1} innych` : ''}
-                        </div>
-                    )}
-                    <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                        <button
-                            className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`}
-                            onClick={() => onLike(post.id, post.liked)}
-                        >
-                            <IcHeart filled={post.liked} />
-                            <span>{post.like_count || 0}</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => { setExpanded(e => !e); if (!expanded) setTimeout(() => inputRef.current?.focus(), 150); }}>
-                            <IcComment />
-                            <span>{post.comment_count || 0}</span>
-                        </button>
+            {/* Edge-to-Edge Photo and Actions Wrapper */}
+            <div style={{ position: 'relative' }}>
+                {photoSrc && (
+                    <div
+                        onClick={() => onPhotoClick && onPhotoClick(post)}
+                        style={{ cursor: 'pointer', display: 'block', position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}
+                    >
+                        <Image
+                            src={photoSrc}
+                            alt=""
+                            className={styles.postPhoto}
+                            width={600} height={750}
+                            onLoad={() => setImgLoaded(true)}
+                            style={{
+                                opacity: imgLoaded ? 1 : 0,
+                                transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',
+                                transform: imgLoaded ? 'scale(1)' : 'scale(1.03)',
+                                objectFit: 'cover'
+                            }}
+                        />
                     </div>
-                    {/* Caption embedded above actions for BeReal effect */}
-                    {post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)', fontWeight: 500 }}>{post.caption}</p>}
-                    {post.description && !post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.4)', fontWeight: 500 }}>{post.description}</p>}
+                )}
+
+                {/* Bottom Overlay Actions & Caption */}
+                <div className={styles.postActions}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                        {post.likers && post.likers.length > 0 && (
+                            <div className={styles.likersText}>
+                                Polubione przez {post.likers[0].name} {post.likers.length > 1 ? `i ${post.likers.length - 1} innych` : ''}
+                            </div>
+                        )}
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                            <button
+                                className={`${styles.actionBtn} ${post.liked ? styles.liked : ''}`}
+                                onClick={() => onLike(post.id, post.liked)}
+                            >
+                                <IcHeart filled={post.liked} />
+                                <span>{post.like_count || 0}</span>
+                            </button>
+                            <button className={styles.actionBtn} onClick={() => { setExpanded(e => !e); if (!expanded) setTimeout(() => inputRef.current?.focus(), 150); }}>
+                                <IcComment />
+                                <span>{post.comment_count || 0}</span>
+                            </button>
+                        </div>
+                        {/* Caption embedded above actions for BeReal effect */}
+                        {post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.6)', fontWeight: 500 }}>{post.caption}</p>}
+                        {post.description && !post.caption && <p className={styles.postCaption} style={{ padding: '0 4px', color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,0.6)', fontWeight: 500 }}>{post.description}</p>}
+                    </div>
                 </div>
             </div>
 
@@ -561,12 +563,12 @@ export default function FeedPage() {
             <div className={styles.pageHeader}>
                 <h1 className={styles.pageTitle}>Znajomi</h1>
                 <div className={styles.headerActions}>
-                    <button className={styles.iconBtn} aria-label="Wyszukaj">
+                    <button className={styles.iconBtn} aria-label="Wyszukaj" onClick={() => showToast('Wyszukiwanie niedługo dostępne', 'info')}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
                             <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                     </button>
-                    <button className={styles.iconBtn} aria-label="Filtruj">
+                    <button className={styles.iconBtn} aria-label="Filtruj" onClick={() => showToast('Filtry niedługo dostępne', 'info')}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20">
                             <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" />
                         </svg>

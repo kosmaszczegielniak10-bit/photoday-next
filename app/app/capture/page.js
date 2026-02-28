@@ -8,20 +8,14 @@ import { useToast } from '@/components/ui/Toast';
 import styles from './capture.module.css';
 
 const MOODS = [
-    // Essentials & Vibes
-    '✨', '🔥', '🚀', '📸', '🎨', '🎵', '💫', '💡', '💯', '🎯',
+    // Vibes & Aesthetics
+    '✨', '🔥', '☁️', '🌙', '⚡️', '🪐', '🌊',
     // Faces
-    '😊', '🥰', '😎', '😅', '🥺', '🤯', '💀', '👽', '🤠', '🥳',
-    '😴', '😡', '🥶', '🥵', '🤫', '🤪', '😇', '🥸', '🥱', '🤐',
-    // Activity & Lifestyle
-    '☕️', '🍕', '🍿', '🥂', '🍣', '🍔', '🌮', '🥗', '🍩', '🥑',
-    '💪', '🧘‍♀️', '🏃‍♂️', '🏋️', '🏂', '🏄‍♀️', '🧗‍♂️', '🏌️‍♀️', '🚴‍♂️', '🥇',
-    // Nature & Travel
-    '☀️', '🌧️', '❄️', '🌈', '🌊', '🌲', '🌺', '🌵', '🍄', '🌍',
-    '✈️', '🚗', '🛵', '🚲', '⛵️', '🚀', '🛸', '⛺️', '🏔️', '🏖️',
-    // Objects & Symbols
-    '❤️', '💔', '⭐', '⚡', '💣', '🎉', '🎁', '🎈', '💸', '💎',
-    '💻', '📱', '🎮', '🎬', '📚', '🖋️', '🔑', '🧸', '🔮', '🧿'
+    '😂', '🥺', '😎', '🥰', '🫠', '🤧', '💀',
+    // Activities & Life
+    '☕️', '🥂', '🍿', '🎧', '🎮', '✈️', '📸',
+    // Symbols
+    '🤍', '❤️‍🔥', '🫶', '🧿', '🍀', '🍒', '🦋'
 ];
 
 export default function CapturePage() {
@@ -79,10 +73,35 @@ export default function CapturePage() {
         try {
             let photoData = undefined;
             if (photoFile) {
-                // Convert to base64 for upload
+                // Resize and compress via standard Canvas API
                 photoData = await new Promise((res, rej) => {
                     const reader = new FileReader();
-                    reader.onload = e => res(e.target.result);
+                    reader.onload = e => {
+                        const img = new window.Image();
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            const MAX_SIZE = 1920;
+
+                            if (width > height && width > MAX_SIZE) {
+                                height *= MAX_SIZE / width;
+                                width = MAX_SIZE;
+                            } else if (height > MAX_SIZE) {
+                                width *= MAX_SIZE / height;
+                                height = MAX_SIZE;
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+                            // Compress to high quality JPEG
+                            res(canvas.toDataURL('image/jpeg', 0.85));
+                        };
+                        img.onerror = rej;
+                        img.src = e.target.result;
+                    };
                     reader.onerror = rej;
                     reader.readAsDataURL(photoFile);
                 });

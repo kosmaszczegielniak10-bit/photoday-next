@@ -227,7 +227,7 @@ export default function MessagesPage() {
             )}
 
             {pickingFriend && (
-                <>
+                <div className="elite-modal-wrapper" style={{ zIndex: 2000 }}>
                     <div className="backdrop fade-in" onClick={() => setPickingFriend(false)} />
                     <div className="bottom-sheet slide-up" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 20px)' }}>
                         <div className="sheet-handle" onClick={() => setPickingFriend(false)} />
@@ -251,7 +251,7 @@ export default function MessagesPage() {
                             })}
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </div>
     );

@@ -1,9 +1,9 @@
 'use client';
 // app/app/albums/[albumId]/page.js — Single Album View (Masonry Grid)
 
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/lib/api';
 import { useToast } from '@/components/ui/Toast';
 import { getStorageUrl } from '@/lib/storage';
@@ -126,8 +126,9 @@ function AddPhotosModal({ albumId, onClose, onAdded }) {
     );
 }
 
-export default function SingleAlbumPage({ params }) {
-    const { albumId } = use(params);
+export default function SingleAlbumPage() {
+    const params = useParams();
+    const albumId = params?.albumId;
     const router = useRouter();
     const showToast = useToast();
     const [album, setAlbum] = useState(null);
